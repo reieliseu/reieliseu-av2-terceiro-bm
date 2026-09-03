@@ -12,10 +12,10 @@ api.interceptors.request.use((config) => {
 })
 
 const modulos = [
-  { id: 1, titulo: 'React e componentes', texto: 'Interfaces, estados, eventos e organização de componentes.', detalhe: 'Aprenda a criar interfaces reutilizáveis com componentes React, controlar estados com useState e responder às ações do usuário.' },
-  { id: 2, titulo: 'Axios e APIs REST', texto: 'Requisições HTTP, interceptors e integração entre front-end e back-end.', detalhe: 'Entenda GET, POST, tratamento de erros e interceptors para enviar o token Bearer automaticamente nas requisições.' },
-  { id: 3, titulo: 'Autenticação com JWT', texto: 'Login seguro, token Bearer, bcrypt e proteção de rotas.', detalhe: 'Veja como o login gera um token JWT, como armazená-lo com segurança e como validar a sessão do usuário.' },
-  { id: 4, titulo: 'Autorização e perfis', texto: 'Permissões, rotas privadas e controle de acesso por perfil.', detalhe: 'Diferencie autenticação de autorização e restrinja recursos conforme o perfil e as permissões do usuário.' },
+  { id: 1, titulo: 'React e componentes', texto: 'Interfaces, estados, eventos e organização de componentes.', detalhe: 'Aprenda a criar interfaces reutilizáveis com componentes React, controlar estados com useState e responder às ações do usuário. Atividade: crie um componente Card com título, descrição e um botão que altere seu estado ao ser clicado.' },
+  { id: 2, titulo: 'Axios e APIs REST', texto: 'Requisições HTTP, interceptors e integração entre front-end e back-end.', detalhe: 'Entenda GET, POST, tratamento de erros e interceptors para enviar o token Bearer automaticamente nas requisições. Atividade: use Axios para consultar uma lista de usuários e exiba os nomes em uma tabela, tratando também um erro da API.' },
+  { id: 3, titulo: 'Autenticação com JWT', texto: 'Login seguro, token Bearer, bcrypt e proteção de rotas.', detalhe: 'Veja como o login gera um token JWT, como armazená-lo com segurança e como validar a sessão do usuário. Atividade: descreva o fluxo de login em três etapas e identifique onde o token Bearer deve ser enviado.' },
+  { id: 4, titulo: 'Autorização e perfis', texto: 'Permissões, rotas privadas e controle de acesso por perfil.', detalhe: 'Diferencie autenticação de autorização e restrinja recursos conforme o perfil e as permissões do usuário. Atividade: crie uma regra que permita o acesso à área administrativa apenas para usuários com perfil admin.' },
 ]
 
 export default function Page() {

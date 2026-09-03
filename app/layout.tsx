@@ -3,7 +3,7 @@ import type { Metadata, Viewport } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'SecureFlow — Autenticação DSW',
+  title: 'Teste seus conhecimentos — DSW',
   description: 'Plataforma acadêmica de autenticação com JWT, bcrypt, React e Axios.',
   generator: 'v0.app',
   icons: {

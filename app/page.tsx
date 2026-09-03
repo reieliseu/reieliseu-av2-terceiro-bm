@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 'use client'
 
 import { useEffect, useState } from 'react'
@@ -73,4 +71,3 @@ export default function Page() {
     </div></section>
   </main>
 }
->>>>>>> 16f9cd8 (feat: add password visibility toggle to login form)

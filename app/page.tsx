@@ -11,6 +11,10 @@ api.interceptors.request.use((config) => {
   return config
 })
 
+function primeiroNome(nome: string) {
+  return nome.trim().split(/\s+/)[0] || 'Aluno'
+}
+
 const modulos = [
   { id: 1, titulo: 'React e componentes', texto: 'Interfaces, estados, eventos e organização de componentes.', detalhe: 'Aprenda a criar interfaces reutilizáveis com componentes React, controlar estados com useState e responder às ações do usuário. Atividade: crie um componente Card com título, descrição e um botão que altere seu estado ao ser clicado.' },
   { id: 2, titulo: 'Axios e APIs REST', texto: 'Requisições HTTP, interceptors e integração entre front-end e back-end.', detalhe: 'Entenda GET, POST, tratamento de erros e interceptors para enviar o token Bearer automaticamente nas requisições. Atividade: use Axios para consultar uma lista de usuários e exiba os nomes em uma tabela, tratando também um erro da API.' },
@@ -31,7 +35,7 @@ export default function Page() {
 
   useEffect(() => {
     const token = localStorage.getItem('token')
-    if (token) { setLogged(true); setPerfil({ nome: localStorage.getItem('nome') || 'Usuário', email: localStorage.getItem('email') || 'aluno@exemplo.com' }) }
+    if (token) { const nomeSalvo = localStorage.getItem('nome') || 'Aluno'; setLogged(true); setPerfil({ nome: primeiroNome(nomeSalvo), email: localStorage.getItem('email') || 'aluno@exemplo.com' }) }
   }, [])
 
   async function submit(event: React.FormEvent) {
@@ -39,8 +43,8 @@ export default function Page() {
     if (!email || !senha || (mode === 'cadastro' && !nome)) { setStatus('Preencha todos os campos obrigatórios.'); return }
     try {
       if (mode === 'cadastro') { await api.post('/usuarios', { nome, email, senha }); setStatus('Cadastro realizado. Agora entre na sua conta.'); setMode('login') }
-      else { const response = await api.post('/login', { email, senha }); localStorage.setItem('token', response.data?.token || `demo-token-${Date.now()}`); localStorage.setItem('nome', nome || 'Aluno DSW'); localStorage.setItem('email', email); setPerfil({ nome: nome || 'Aluno DSW', email }); setLogged(true) }
-    } catch { const usuario = { nome: nome || 'Aluno DSW', email }; localStorage.setItem('token', `demo-token-${Date.now()}`); localStorage.setItem('nome', usuario.nome); localStorage.setItem('email', email); setPerfil(usuario); setLogged(true); setStatus('API indisponível no preview. Demonstração local ativada.') }
+      else { const response = await api.post('/login', { email, senha }); localStorage.setItem('token', response.data?.token || `demo-token-${Date.now()}`); const nomeUsuario = localStorage.getItem('nome') || nome || email.split('@')[0] || 'Aluno'; localStorage.setItem('nome', nomeUsuario); localStorage.setItem('email', email); setPerfil({ nome: primeiroNome(nomeUsuario), email }); setLogged(true) }
+    } catch { const nomeUsuario = localStorage.getItem('nome') || nome || email.split('@')[0] || 'Aluno'; const usuario = { nome: primeiroNome(nomeUsuario), email }; localStorage.setItem('token', `demo-token-${Date.now()}`); localStorage.setItem('nome', usuario.nome); localStorage.setItem('email', email); setPerfil(usuario); setLogged(true); setStatus('API indisponível no preview. Demonstração local ativada.') }
   }
 
   function logout() { localStorage.removeItem('token'); setLogged(false); setPerfil(null); setModuloSelecionado(null); setStatus('Sessão encerrada com segurança.') }

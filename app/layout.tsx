@@ -3,8 +3,8 @@ import type { Metadata, Viewport } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Teste seus conhecimentos — DSW',
-  description: 'Plataforma acadêmica de autenticação com JWT, bcrypt, React e Axios.',
+  title: 'Colporta — Livros e cursos com propósito',
+  description: 'Catálogo de livros e cursos para uma colportagem com conhecimento, ética e propósito.',
   generator: 'v0.app',
   icons: {
     icon: [

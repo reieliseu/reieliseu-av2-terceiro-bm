@@ -17,6 +17,16 @@ const produtos: Produto[] = [
   { id: 4, titulo: 'Comunicação e Propósito', categoria: 'Cursos', descricao: 'Descubra como ouvir melhor, falar com clareza e conduzir cada conversa com segurança e intenção.', formato: 'Curso online · 5 aulas', preco: 69.9 },
   { id: 5, titulo: 'Manual de Vendas com Propósito', categoria: 'Livros', descricao: 'Uma história sobre ética, serviço e escolhas conscientes para quem acredita que vender também é cuidar.', formato: 'Livro físico · 212 páginas', preco: 59.9 },
   { id: 6, titulo: 'Jornada do Novo Colportor', categoria: 'Cursos', descricao: 'Viva uma trilha de aprendizado que acompanha desafios reais e mostra como começar com confiança e constância.', formato: 'Curso online · 10 aulas', preco: 119.9 },
+  { id: 7, titulo: 'Liderança que Serve', categoria: 'Cursos', descricao: 'Aprenda a conduzir equipes com humildade, clareza e foco em resultados que fazem sentido.', formato: 'Curso online · 6 aulas', preco: 79.9 },
+  { id: 8, titulo: 'O Poder da Escuta', categoria: 'Livros', descricao: 'Uma leitura prática sobre empatia, presença e diálogos que criam conexões verdadeiras.', formato: 'E-book · PDF', preco: 29.9 },
+  { id: 9, titulo: 'Planejamento de Campo', categoria: 'Cursos', descricao: 'Organize sua rotina, suas visitas e suas metas para aproveitar melhor cada dia de trabalho.', formato: 'Curso online · 4 aulas', preco: 54.9 },
+  { id: 10, titulo: 'Histórias que Transformam', categoria: 'Livros', descricao: 'Relatos de encontros marcantes que mostram como pequenas atitudes podem mudar grandes jornadas.', formato: 'Livro físico · 168 páginas', preco: 44.9, destaque: true },
+  { id: 11, titulo: 'Finanças para Colportores', categoria: 'Cursos', descricao: 'Construa uma relação saudável com dinheiro, planejamento e sustentabilidade na sua missão.', formato: 'Curso online · 7 aulas', preco: 64.9 },
+  { id: 12, titulo: 'Guia de Abordagem', categoria: 'Livros', descricao: 'Técnicas simples para iniciar conversas com respeito, naturalidade e confiança.', formato: 'Livro físico · 136 páginas', preco: 39.9 },
+  { id: 13, titulo: 'Marketing com Verdade', categoria: 'Cursos', descricao: 'Descubra como comunicar seu trabalho com autenticidade e alcançar as pessoas certas.', formato: 'Curso online · 5 aulas', preco: 74.9 },
+  { id: 14, titulo: 'Diálogos de Esperança', categoria: 'Livros', descricao: 'Reflexões para quem deseja levar mensagens positivas e construir pontes em cada encontro.', formato: 'E-book · PDF', preco: 19.9 },
+  { id: 15, titulo: 'Mentoria para Novos Colportores', categoria: 'Cursos', descricao: 'Uma trilha guiada para acelerar seu aprendizado e enfrentar os primeiros desafios com apoio.', formato: 'Curso online · 9 aulas', preco: 99.9, destaque: true },
+  { id: 16, titulo: 'Caderno de Metas', categoria: 'Livros', descricao: 'Planeje sua semana, acompanhe seus avanços e transforme intenção em constância.', formato: 'Livro físico · 96 páginas', preco: 27.9 },
 ]
 
 const dinheiro = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' })

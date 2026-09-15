@@ -1,15 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import axios from 'axios'
 import { BookOpen, Check, ChevronDown, Eye, EyeOff, GraduationCap, LockKeyhole, Minus, Package, Plus, Search, ShieldCheck, ShoppingBag, Trash2, UserRound, X } from 'lucide-react'
-
-const api = axios.create({ baseURL: '/api' })
-api.interceptors.request.use((config) => {
-  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null
-  if (token) config.headers.Authorization = `Bearer ${token}`
-  return config
-})
 
 function primeiroNome(nome: string) {
   return nome.trim().split(/\s+/)[0] || 'Cliente'
@@ -77,31 +69,28 @@ export default function Page() {
     event.preventDefault()
     setStatus('')
     if (!email || !senha || (mode === 'cadastro' && !nome)) { setStatus('Preencha todos os campos obrigatórios.'); return }
-    try {
-      if (mode === 'cadastro') {
-        await api.post('/usuarios', { nome, email, senha })
-        setStatus('Cadastro realizado. Agora entre na sua conta.')
-        setMode('login')
-      } else {
-        const response = await api.post('/login', { email, senha })
-        const nomeUsuario = localStorage.getItem('nome') || nome || email.split('@')[0] || 'Cliente'
-        localStorage.setItem('token', response.data?.token || `demo-token-${Date.now()}`)
-        localStorage.setItem('nome', nomeUsuario)
-        localStorage.setItem('email', email)
-        setPerfil({ nome: primeiroNome(nomeUsuario), email })
-        setCliente((atual) => ({ ...atual, nome: nomeUsuario, email }))
-        setLogged(true)
-      }
-    } catch {
-      const nomeUsuario = localStorage.getItem('nome') || nome || email.split('@')[0] || 'Cliente'
-      localStorage.setItem('token', `demo-token-${Date.now()}`)
-      localStorage.setItem('nome', nomeUsuario)
-      localStorage.setItem('email', email)
-      setPerfil({ nome: primeiroNome(nomeUsuario), email })
-      setCliente((atual) => ({ ...atual, nome: nomeUsuario, email }))
-      setLogged(true)
-      setStatus('API indisponível no preview. Demonstração local ativada.')
+    if (mode === 'cadastro') {
+      localStorage.setItem('conta', JSON.stringify({ nome, email, senha }))
+      setStatus('Cadastro realizado. Agora entre na sua conta.')
+      setMode('login')
+      setSenha('')
+      return
     }
+
+    const contaSalva = localStorage.getItem('conta')
+    const conta = contaSalva ? JSON.parse(contaSalva) as { nome: string; email: string; senha: string } : null
+    if (conta && (conta.email !== email || conta.senha !== senha)) {
+      setStatus('E-mail ou senha incorretos.')
+      return
+    }
+
+    const nomeUsuario = conta?.nome || localStorage.getItem('nome') || email.split('@')[0] || 'Cliente'
+    localStorage.setItem('token', `demo-token-${Date.now()}`)
+    localStorage.setItem('nome', nomeUsuario)
+    localStorage.setItem('email', email)
+    setPerfil({ nome: primeiroNome(nomeUsuario), email })
+    setCliente((atual) => ({ ...atual, nome: nomeUsuario, email }))
+    setLogged(true)
   }
 
   function logout() {

@@ -27,6 +27,8 @@ const produtos: Produto[] = [
   { id: 14, titulo: 'Diálogos de Esperança', categoria: 'Livros', descricao: 'Reflexões para quem deseja levar mensagens positivas e construir pontes em cada encontro.', formato: 'E-book · PDF', preco: 19.9 },
   { id: 15, titulo: 'Mentoria para Novos Colportores', categoria: 'Cursos', descricao: 'Uma trilha guiada para acelerar seu aprendizado e enfrentar os primeiros desafios com apoio.', formato: 'Curso online · 9 aulas', preco: 99.9, destaque: true },
   { id: 16, titulo: 'Caderno de Metas', categoria: 'Livros', descricao: 'Planeje sua semana, acompanhe seus avanços e transforme intenção em constância.', formato: 'Livro físico · 96 páginas', preco: 27.9 },
+  { id: 17, titulo: 'Rotina de Alta Performance', categoria: 'Cursos', descricao: 'Organize energia, foco e prioridades para manter uma rotina consistente em cada etapa da colportagem.', formato: 'Curso online · 6 aulas', preco: 69.9 },
+  { id: 18, titulo: 'Cartas para uma Nova Jornada', categoria: 'Livros', descricao: 'Mensagens curtas para inspirar decisões corajosas, recomeços e encontros cheios de significado.', formato: 'Livro físico · 120 páginas', preco: 34.9 },
 ]
 
 const dinheiro = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' })

@@ -1,17 +1,8 @@
 import { NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { db } from '@/lib/db'
-import { eq } from 'drizzle-orm'
-import { orderItems, orders } from '@/lib/db/schema'
-
-const produtos = new Map([
-  [1, { nome: 'O Colportor de Sucesso', preco: 4990 }],
-  [2, { nome: 'Conversas que Inspiram', preco: 2490 }],
-  [3, { nome: 'Colportagem na Prática', preco: 8990 }],
-  [4, { nome: 'Comunicação e Propósito', preco: 6990 }],
-  [5, { nome: 'Manual de Vendas com Propósito', preco: 5990 }],
-  [6, { nome: 'Jornada do Novo Colportor', preco: 11990 }],
-])
+import { eq, inArray } from 'drizzle-orm'
+import { orderItems, orders, products } from '@/lib/db/schema'
 
 export async function POST(request: Request) {
   try {
@@ -22,39 +13,46 @@ export async function POST(request: Request) {
     const items = Array.isArray(body.items) ? body.items : []
     const customer = body.customer ?? {}
 
-    if (!items.length || !customer.nome || !customer.email || !customer.telefone) {
-      return NextResponse.json({ error: 'Dados do pedido incompletos.' }, { status: 400 })
+    const nome = typeof customer.nome === 'string' ? customer.nome.trim() : ''
+    const email = typeof customer.email === 'string' ? customer.email.trim().toLowerCase() : ''
+    const telefone = typeof customer.telefone === 'string' ? customer.telefone.trim() : ''
+    if (!items.length || !nome || !telefone || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || nome.length > 120 || telefone.length > 30) {
+      return NextResponse.json({ error: 'Dados do pedido incompletos ou inválidos.' }, { status: 400 })
     }
 
-    const validatedItems = items.map((item: { id: number; quantidade: number }) => {
-      const produto = produtos.get(Number(item.id))
-      const quantidade = Number(item.quantidade)
-      if (!produto || !Number.isInteger(quantidade) || quantidade < 1 || quantidade > 10) throw new Error('Produto ou quantidade inválida.')
-      return { id: Number(item.id), quantidade, ...produto }
+    const normalizedItems = items.map((item: { id: number; quantidade: number }) => ({ id: Number(item.id), quantidade: Number(item.quantidade) }))
+    if (normalizedItems.some((item) => !Number.isInteger(item.id) || !Number.isInteger(item.quantidade) || item.quantidade < 1 || item.quantidade > 10)) {
+      return NextResponse.json({ error: 'Produto ou quantidade inválida.' }, { status: 400 })
+    }
+    const productIds = [...new Set(normalizedItems.map((item) => item.id))]
+    const databaseProducts = await db.select().from(products).where(inArray(products.id, productIds))
+    const productMap = new Map(databaseProducts.map((product) => [product.id, product]))
+    if (databaseProducts.length !== productIds.length || databaseProducts.some((product) => product.priceCents < 1)) {
+      return NextResponse.json({ error: 'Um ou mais produtos não estão disponíveis.' }, { status: 400 })
+    }
+    const validatedItems = normalizedItems.map((item) => {
+      const produto = productMap.get(item.id)
+      if (!produto) throw new Error('Produto não encontrado.')
+      return { id: produto.id, quantidade: item.quantidade, nome: produto.title, preco: produto.priceCents }
     })
     const totalCents = validatedItems.reduce((sum, item) => sum + item.preco * item.quantidade, 0)
-    const [order] = await db.insert(orders).values({ customerName: String(customer.nome), customerEmail: String(customer.email), customerPhone: String(customer.telefone), totalCents, paymentMethod: body.paymentMethod === 'pix' ? 'pix' : 'cartao' }).returning({ id: orders.id })
+    const [order] = await db.insert(orders).values({ customerName: nome, customerEmail: email, customerPhone: telefone, totalCents, paymentMethod: body.paymentMethod === 'pix' ? 'pix' : 'cartao' }).returning({ id: orders.id })
     await db.insert(orderItems).values(validatedItems.map((item) => ({ orderId: order.id, productId: item.id, title: item.nome, unitPriceCents: item.preco, quantity: item.quantidade })))
 
-    const lineItems = validatedItems.map((item) => {
-      const produto = produtos.get(Number(item.id))
-      const quantidade = Number(item.quantidade)
-      if (!produto || !Number.isInteger(quantidade) || quantidade < 1 || quantidade > 10) throw new Error('Produto ou quantidade inválida.')
-      return {
-        price_data: {
-          currency: 'brl',
-          product_data: { name: produto.nome },
-          unit_amount: produto.preco,
-        },
-        quantity: quantidade,
-      }
-    })
+    const lineItems = validatedItems.map((item) => ({
+      price_data: {
+        currency: 'brl',
+        product_data: { name: item.nome },
+        unit_amount: item.preco,
+      },
+      quantity: item.quantidade,
+    }))
 
     const origin = request.headers.get('origin') || 'http://localhost:3000'
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
       line_items: lineItems,
-      customer_email: customer.email,
+      customer_email: email,
       phone_number_collection: { enabled: true },
       automatic_payment_methods: { enabled: true },
       success_url: `${origin}/?pagamento=sucesso`,

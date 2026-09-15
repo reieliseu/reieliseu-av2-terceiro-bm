@@ -57,7 +57,7 @@ export async function POST(request: Request) {
       automatic_payment_methods: { enabled: true },
       success_url: `${origin}/?pagamento=sucesso`,
       cancel_url: `${origin}/?pagamento=cancelado`,
-      metadata: { nome: String(customer.nome).slice(0, 100), telefone: String(customer.telefone).slice(0, 30), pagamento: body.paymentMethod === 'pix' ? 'pix' : 'cartao' },
+      metadata: { nome: nome.slice(0, 100), telefone: telefone.slice(0, 30), pagamento: body.paymentMethod === 'pix' ? 'pix' : 'cartao', order_id: order.id },
       integration_identifier: `colportagem_stor_${Math.random().toString(36).slice(2, 10)}`,
     })
 

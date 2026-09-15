@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react'
 import axios from 'axios'
 import { BookOpen, Check, ChevronDown, Eye, EyeOff, GraduationCap, LockKeyhole, Minus, Package, Plus, Search, ShieldCheck, ShoppingBag, Trash2, UserRound, X } from 'lucide-react'
 
-const api = axios.create({ baseURL: 'http://localhost:3001' })
+const api = axios.create({ baseURL: '/api' })
 api.interceptors.request.use((config) => {
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null
   if (token) config.headers.Authorization = `Bearer ${token}`
@@ -48,8 +48,21 @@ export default function Page() {
   const [erroCheckout, setErroCheckout] = useState('')
   const [pagamento, setPagamento] = useState<'pix' | 'cartao'>('pix')
   const [produtoSelecionado, setProdutoSelecionado] = useState<Produto | null>(null)
+  const [catalogo, setCatalogo] = useState<Produto[]>(produtos)
 
   useEffect(() => {
+    const carregarCatalogo = async () => {
+      try {
+        const response = await fetch('/api/products', { cache: 'no-store' })
+        if (!response.ok) throw new Error('Falha ao carregar catálogo')
+        const dados = await response.json()
+        setCatalogo(dados.map((produto: { id: number; title: string; category: 'Livros' | 'Cursos'; description: string; format: string; priceCents: number; featured: boolean }) => ({ id: produto.id, titulo: produto.title, categoria: produto.category, descricao: produto.description, formato: produto.format, preco: produto.priceCents / 100, destaque: produto.featured })))
+      } catch {
+        setStatus('Não foi possível atualizar o catálogo agora. Exibindo os itens disponíveis.')
+      }
+    }
+    void carregarCatalogo()
+
     const token = localStorage.getItem('token')
     if (token) {
       const nomeSalvo = localStorage.getItem('nome') || 'Cliente'
@@ -111,11 +124,11 @@ export default function Page() {
     setCarrinho((atual) => atual.flatMap((item) => item.id === id ? (item.quantidade + delta > 0 ? [{ ...item, quantidade: item.quantidade + delta }] : []) : [item]))
   }
 
-  const produtosFiltrados = useMemo(() => produtos.filter((produto) => {
+  const produtosFiltrados = useMemo(() => catalogo.filter((produto) => {
     const correspondeCategoria = categoria === 'Todos' || produto.categoria === categoria
     const termo = busca.toLocaleLowerCase('pt-BR')
     return correspondeCategoria && `${produto.titulo} ${produto.descricao}`.toLocaleLowerCase('pt-BR').includes(termo)
-  }), [busca, categoria])
+  }), [busca, categoria, catalogo])
   const totalItens = carrinho.reduce((total, item) => total + item.quantidade, 0)
   const total = carrinho.reduce((soma, item) => soma + item.preco * item.quantidade, 0)
 

@@ -122,6 +122,8 @@ export default function Page() {
   async function finalizarPedido(event: React.FormEvent) {
     event.preventDefault()
     if (!cliente.nome || !cliente.email || !cliente.telefone) { setErroCheckout('Preencha nome, e-mail e telefone para continuar.'); return }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cliente.email)) { setErroCheckout('Digite um e-mail válido para receber a confirmação.'); return }
+    if (!carrinho.length) { setErroCheckout('Adicione pelo menos um item ao carrinho.'); return }
     setErroCheckout('')
     try {
       const response = await fetch('/api/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ items: carrinho.map(({ id, quantidade }) => ({ id, quantidade })), customer: cliente, paymentMethod: pagamento }) })

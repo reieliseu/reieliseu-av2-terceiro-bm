@@ -12,7 +12,9 @@ const produtos = new Map([
 
 export async function POST(request: Request) {
   try {
-    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string)
+    const secretKey = process.env.STRIPE_SECRET_KEY
+    if (!secretKey) return NextResponse.json({ error: 'Stripe não está configurado neste ambiente.' }, { status: 503 })
+    const stripe = new StripeClient({ apiKey: secretKey })
     const body = await request.json()
     const items = Array.isArray(body.items) ? body.items : []
     const customer = body.customer ?? {}

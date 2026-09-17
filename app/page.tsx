@@ -94,12 +94,23 @@ export default function Page() {
     void carregarCatalogo()
 
     const token = localStorage.getItem('token')
-    if (token) {
-      const nomeSalvo = localStorage.getItem('nome') || 'Cliente'
-      const emailSalvo = localStorage.getItem('email') || 'cliente@exemplo.com'
-      setLogged(true)
-      setPerfil({ nome: primeiroNome(nomeSalvo), email: emailSalvo })
-      setCliente({ nome: nomeSalvo, email: emailSalvo, telefone: '' })
+    const contaSalva = localStorage.getItem('conta')
+    if (token && contaSalva) {
+      try {
+        const conta = JSON.parse(contaSalva) as { nome?: string; email?: string; senha?: string }
+        const nomeSalvo = localStorage.getItem('nome') || conta.nome
+        const emailSalvo = localStorage.getItem('email') || conta.email
+        if (nomeSalvo && emailSalvo && conta.email && conta.senha) {
+          setLogged(true)
+          setPerfil({ nome: primeiroNome(nomeSalvo), email: emailSalvo })
+          setCliente({ nome: nomeSalvo, email: emailSalvo, telefone: '' })
+        } else {
+          localStorage.removeItem('token')
+        }
+      } catch {
+        localStorage.removeItem('token')
+        localStorage.removeItem('conta')
+      }
     }
   }, [])
 
@@ -117,9 +128,17 @@ export default function Page() {
     }
 
     const contaSalva = localStorage.getItem('conta')
-    const conta = contaSalva ? JSON.parse(contaSalva) as { nome: string; email: string; senha: string } : null
-    if (!conta || conta.email.trim().toLowerCase() !== email.trim().toLowerCase() || conta.senha !== senha) {
-      setStatus('E-mail ou senha incorretos. Verifique os dados e tente novamente.')
+    let conta: { nome: string; email: string; senha: string } | null = null
+    try {
+      conta = contaSalva ? JSON.parse(contaSalva) as { nome: string; email: string; senha: string } : null
+    } catch {
+      localStorage.removeItem('conta')
+    }
+    const credenciaisValidas = Boolean(conta?.email && conta?.senha && conta.email.trim().toLowerCase() === email.trim().toLowerCase() && conta.senha === senha)
+    if (!credenciaisValidas) {
+      localStorage.removeItem('token')
+      setLogged(false)
+      setStatus('Acesso bloqueado. E-mail ou senha incorretos. Sem a senha correta, não é possível entrar.')
       return
     }
 

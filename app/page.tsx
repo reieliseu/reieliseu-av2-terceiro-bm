@@ -5,7 +5,7 @@ import { Crosshair, Gauge, Keyboard, Pause, Play, RotateCcw, Shield, Skull, Spar
 
 type Orb = { id: number; x: number; y: number; value: number }
 type Enemy = { id: number; x: number; y: number; hp: number }
-type Shot = { id: number; x: number; y: number; targetId: number }
+type Shot = { id: number; x: number; y: number; dx: number; dy: number; targetId: number }
 type EnemyShot = { id: number; x: number; y: number; dx: number; dy: number }
 
 const initialOrbs: Orb[] = [
@@ -48,7 +48,8 @@ export default function Page() {
   const attack = useCallback((target: Enemy) => {
     if (!running || paused || energy < 8) return
     setEnergy((current) => current - 8)
-    setShots((current) => [...current, { id: Date.now(), x: position.x, y: position.y, targetId: target.id }])
+    const distance = Math.hypot(target.x - position.x, target.y - position.y) || 1
+    setShots((current) => [...current, { id: Date.now(), x: position.x, y: position.y, dx: (target.x - position.x) / distance * 3.5, dy: (target.y - position.y) / distance * 3.5, targetId: target.id }])
     setEnemies((current) => current.map((enemy) => enemy.id === target.id ? { ...enemy, hp: enemy.hp - 1 } : enemy).filter((enemy) => enemy.hp > 0))
     setScore((current) => current + (target.hp === 1 ? 100 : 25))
     if (target.hp === 1) setDefeated((current) => current + 1)
@@ -90,6 +91,7 @@ export default function Page() {
   useEffect(() => {
     if (!running || paused) return
     const timer = window.setInterval(() => {
+      setShots((current) => current.map((shot) => ({ ...shot, x: shot.x + shot.dx, y: shot.y + shot.dy })).filter((shot) => shot.x > 0 && shot.x < 100 && shot.y > 0 && shot.y < 100))
       setEnemyShots((current) => current.map((shot) => ({ ...shot, x: shot.x + shot.dx, y: shot.y + shot.dy })).filter((shot) => shot.x > 0 && shot.x < 100 && shot.y > 0 && shot.y < 100))
     }, 80)
     return () => window.clearInterval(timer)

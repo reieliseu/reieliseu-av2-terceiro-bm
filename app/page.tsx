@@ -29,6 +29,10 @@ export default function Page() {
   const [level, setLevel] = useState(1)
   const [hull, setHull] = useState(100)
   const [defeated, setDefeated] = useState(0)
+  const [blueScore, setBlueScore] = useState(42)
+  const [redScore, setRedScore] = useState(37)
+  const [capture, setCapture] = useState(32)
+  const [ammo, setAmmo] = useState(30)
 
   const startGame = () => {
     setRunning(true)
@@ -43,11 +47,16 @@ export default function Page() {
     setLevel(1)
     setHull(100)
     setDefeated(0)
+    setBlueScore(42)
+    setRedScore(37)
+    setCapture(32)
+    setAmmo(30)
   }
 
   const attack = useCallback((target: Enemy) => {
-    if (!running || paused || energy < 8) return
+    if (!running || paused || energy < 8 || ammo <= 0) return
     setEnergy((current) => current - 8)
+    setAmmo((current) => current - 1)
     const distance = Math.hypot(target.x - position.x, target.y - position.y) || 1
     setShots((current) => [...current, { id: Date.now(), x: position.x, y: position.y, dx: (target.x - position.x) / distance * 3.5, dy: (target.y - position.y) / distance * 3.5, targetId: target.id }])
     setEnemies((current) => current.map((enemy) => enemy.id === target.id ? { ...enemy, hp: enemy.hp - 1 } : enemy).filter((enemy) => enemy.hp > 0))
@@ -84,6 +93,7 @@ export default function Page() {
         return { id: Date.now() + enemy.id, x: enemy.x, y: enemy.y, dx: (position.x - enemy.x) / distance * 2.2, dy: (position.y - enemy.y) / distance * 2.2 }
       })])
       setHull((current) => Math.max(0, current - (enemies.some((enemy) => Math.hypot(enemy.x - position.x, enemy.y - position.y) < 10) ? 2 : 0)))
+      if (Math.hypot(position.x - 50, position.y - 45) < 18) setCapture((current) => Math.min(100, current + 1))
     }, 900)
     return () => window.clearInterval(timer)
   }, [enemies, paused, position.x, position.y, running])
@@ -125,7 +135,7 @@ export default function Page() {
     <main className="min-h-screen overflow-hidden bg-[#070b16] text-white selection:bg-cyan-300 selection:text-[#07101b]">
       <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_50%_20%,rgba(0,217,255,.16),transparent_35%),linear-gradient(rgba(255,255,255,.025)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.025)_1px,transparent_1px)] bg-[size:auto,32px_32px,32px_32px]" />
       <div className="relative mx-auto flex min-h-screen w-full max-w-7xl flex-col px-4 py-5 sm:px-8 lg:px-10">
-        <header className="flex items-center justify-between border-b border-cyan-300/15 pb-5">
+        <header className="flex items-center justify-between border-b border-cyan-300/15 pb-5"><div className="pointer-events-none absolute left-1/2 top-3 z-30 flex -translate-x-1/2 items-center overflow-hidden rounded-b-xl border-x border-b border-white/15 bg-[#12253c]/95 shadow-xl"><div className="bg-cyan-500/90 px-8 py-2 text-2xl font-black text-white">{blueScore}</div><div className="px-5 py-2 text-xl font-mono font-bold text-white">07:24</div><div className="bg-red-500/90 px-8 py-2 text-2xl font-black text-white">{redScore}</div></div><div className="pointer-events-none absolute right-5 top-3 z-30 hidden items-center gap-3 rounded-lg border border-cyan-300/60 bg-[#102b48]/95 px-5 py-3 text-sm font-bold tracking-wide text-white shadow-[0_0_24px_rgba(0,174,255,.25)] sm:flex"><Target className="size-5 text-cyan-300" /> CAPTURE O PONTO DE CONTROLE</div>
           <div className="flex items-center gap-3"><div className="grid size-11 place-items-center rounded-xl border border-cyan-300/50 bg-cyan-300/10 text-cyan-300 shadow-[0_0_28px_rgba(34,211,238,.2)]"><Crosshair className="size-6" /></div><div><p className="font-mono text-xs tracking-[.35em] text-cyan-300">NEON//DRIFT</p><h1 className="text-sm font-semibold tracking-[.18em] text-white/80">PROTOCOLO DE EXPLORAÇÃO</h1></div></div>
           <div className="hidden items-center gap-6 text-xs text-white/45 sm:flex"><span className="flex items-center gap-2"><Keyboard className="size-4" /> WASD / SETAS</span><span className="flex items-center gap-2"><Gauge className="size-4" /> SETOR 07</span></div>
         </header>
@@ -133,14 +143,14 @@ export default function Page() {
         <section className="grid flex-1 gap-6 py-7 lg:grid-cols-[1fr_290px] lg:items-center">
           <div className="relative overflow-hidden rounded-3xl border border-cyan-300/25 bg-[#0b1424]/80 p-3 shadow-[0_0_80px_rgba(0,174,255,.1)] sm:p-5">
             <div className="mb-3 flex items-center justify-between px-2 font-mono text-[10px] uppercase tracking-[.25em] text-cyan-200/60"><span>Zona de combate // {level.toString().padStart(2, '0')}</span><span className="flex items-center gap-2"><span className="size-2 animate-pulse rounded-full bg-emerald-400" /> sistema online</span></div>
-            <div className="relative aspect-[16/10] overflow-hidden rounded-2xl border border-white/10 bg-[#050914]" aria-label="Arena jogável">
+            <div className="relative aspect-[16/10] overflow-hidden rounded-2xl border border-white/10 bg-[radial-gradient(circle_at_62%_38%,rgba(38,137,204,.5),transparent_22%),linear-gradient(135deg,#1b3543,#12202e_40%,#374b39)]" aria-label="Arena jogável"><div className="absolute left-5 top-5 z-20 size-32 rounded-full border-2 border-white/70 bg-[#091627]/75 p-3 shadow-[0_0_24px_rgba(0,174,255,.25)]"><div className="relative size-full overflow-hidden rounded-full border border-cyan-300/30 bg-[linear-gradient(45deg,transparent_47%,rgba(0,174,255,.3)_48%,transparent_51%),linear-gradient(-45deg,transparent_47%,rgba(0,174,255,.3)_48%,transparent_51%)]"><span className="absolute left-1/2 top-1/2 size-3 -translate-x-1/2 -translate-y-1/2 rotate-45 bg-white shadow-[0_0_10px_#fff]" /><span className="absolute left-5 top-8 size-2 rounded-full bg-red-400" /><span className="absolute right-5 top-12 size-2 rounded-full bg-red-400" /><span className="absolute bottom-5 left-8 size-2 rounded-full bg-cyan-300" /></div></div><div className="absolute left-1/2 top-[45%] z-10 -translate-x-1/2 -translate-y-1/2 text-center"><div className="grid size-14 rotate-45 place-items-center border-2 border-cyan-200 bg-cyan-400/20 shadow-[0_0_30px_rgba(34,211,238,.9)]"><span className="-rotate-45 text-2xl font-black">B</span></div><p className="mt-4 font-mono text-sm font-bold text-white">{capture} m</p></div>
               <div className="absolute inset-0 opacity-25" style={{ backgroundImage: 'linear-gradient(rgba(47,225,255,.25) 1px, transparent 1px), linear-gradient(90deg, rgba(47,225,255,.25) 1px, transparent 1px)', backgroundSize: '44px 44px' }} />
               <div className="absolute left-1/2 top-1/2 size-72 -translate-x-1/2 -translate-y-1/2 rounded-full border border-cyan-300/15 shadow-[0_0_80px_rgba(34,211,238,.08)]" />
               {enemies.map((enemy) => <button key={enemy.id} type="button" onClick={() => attack(enemy)} className="absolute z-10 grid size-10 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-red-300 bg-red-500/20 text-red-200 shadow-[0_0_28px_rgba(248,113,113,.8)] transition hover:scale-125" style={{ left: `${enemy.x}%`, top: `${enemy.y}%` }} aria-label={`Atacar inimigo com ${enemy.hp} pontos de vida`}><Skull className="size-5" /><span className="absolute -bottom-4 font-mono text-[8px] text-red-200">HP {enemy.hp}</span></button>)}
               {shots.map((shot) => <span key={shot.id} className="absolute z-30 size-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-yellow-200 shadow-[0_0_18px_6px_rgba(250,204,21,.8)]" style={{ left: `${shot.x}%`, top: `${shot.y}%` }} />)}
               {enemyShots.map((shot) => <span key={shot.id} className="absolute z-30 size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-red-400 shadow-[0_0_18px_6px_rgba(248,113,113,.85)]" style={{ left: `${shot.x}%`, top: `${shot.y}%` }} aria-label="Tiro inimigo" />)}
               {orbs.map((orb) => <button key={orb.id} type="button" onClick={() => { setPosition({ x: orb.x, y: orb.y }); setScore((current) => current + orb.value); setOrbs((current) => current.filter((item) => item.id !== orb.id)) }} className="absolute z-10 grid size-8 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-fuchsia-300 bg-fuchsia-400/20 text-fuchsia-200 shadow-[0_0_24px_rgba(232,121,249,.7)] transition hover:scale-125" style={{ left: `${orb.x}%`, top: `${orb.y}%` }} aria-label={`Coletar núcleo de energia de ${orb.value} pontos`}><Sparkles className="size-4" /></button>)}
-              <div className="absolute z-20 -translate-x-1/2 -translate-y-1/2 transition-all duration-150" style={{ left: `${position.x}%`, top: `${position.y}%` }}><div className="absolute -right-7 top-1/2 h-2 w-8 -translate-y-1/2 rounded-r-full border border-yellow-200 bg-yellow-300 shadow-[0_0_16px_rgba(250,204,21,.9)]" aria-label="Canhão direito" /><div className="absolute -left-7 top-1/2 h-2 w-8 -translate-y-1/2 rounded-l-full border border-yellow-200 bg-yellow-300 shadow-[0_0_16px_rgba(250,204,21,.9)]" aria-label="Canhão esquerdo" /><div className="grid size-14 rotate-45 place-items-center border-2 border-cyan-200 bg-cyan-400/20 shadow-[0_0_32px_rgba(34,211,238,.85)]"><Zap className="size-7 -rotate-45 text-cyan-100" /></div><span className="absolute -bottom-7 left-1/2 -translate-x-1/2 whitespace-nowrap font-mono text-[9px] tracking-[.2em] text-cyan-200">VOCÊ · ARMADO</span></div>
+              <div className="absolute z-20 -translate-x-1/2 -translate-y-1/2 transition-all duration-150" style={{ left: `${position.x}%`, top: `${position.y}%` }}><div className="absolute -right-7 top-1/2 h-2 w-8 -translate-y-1/2 rounded-r-full border border-yellow-200 bg-yellow-300 shadow-[0_0_16px_rgba(250,204,21,.9)]" aria-label="Canhão direito" /><div className="absolute -left-7 top-1/2 h-2 w-8 -translate-y-1/2 rounded-l-full border border-yellow-200 bg-yellow-300 shadow-[0_0_16px_rgba(250,204,21,.9)]" aria-label="Canhão esquerdo" /><div className="grid size-14 rotate-45 place-items-center border-2 border-cyan-200 bg-cyan-400/20 shadow-[0_0_32px_rgba(34,211,238,.85)]"><Zap className="size-7 -rotate-45 text-cyan-100" /></div><span className="absolute -bottom-7 left-1/2 -translate-x-1/2 whitespace-nowrap font-mono text-[9px] tracking-[.2em] text-cyan-200">VOCÊ · ARMADO</span></div><div className="absolute bottom-4 left-4 z-20 flex items-center gap-3 rounded-lg border border-cyan-300/50 bg-[#07182a]/90 px-4 py-2 shadow-lg"><span className="text-2xl font-black text-cyan-300">✚</span><span className="text-2xl font-black">{hull}</span><div className="h-3 w-36 overflow-hidden rounded-sm bg-white/20"><div className="h-full bg-cyan-300" style={{ width: `${hull}%` }} /></div></div><div className="absolute bottom-4 right-4 z-20 flex items-center gap-4 rounded-lg border border-cyan-300/50 bg-[#07182a]/90 px-5 py-2 shadow-lg"><span className="text-2xl text-white">▰</span><span className="text-3xl font-black">{ammo}</span><span className="text-sm text-white/50">/ 90</span></div>
               {!running && <div className="absolute inset-0 grid place-items-center bg-[#050914]/70 backdrop-blur-sm"><button type="button" onClick={startGame} className="group flex items-center gap-3 rounded-full border border-cyan-200/50 bg-cyan-300 px-7 py-3 font-semibold text-[#06111c] shadow-[0_0_35px_rgba(34,211,238,.4)] transition hover:scale-105"><Play className="size-5 fill-current" /> INICIAR MISSÃO</button></div>}
               {paused && <div className="absolute inset-0 grid place-items-center bg-[#050914]/75 backdrop-blur-sm"><p className="font-mono text-sm tracking-[.3em] text-cyan-200">MISSÃO PAUSADA</p></div>}
             </div>

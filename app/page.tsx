@@ -1,7 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { Lock, Play, Shield, Skull, Star, Zap } from 'lucide-react'
+import Link from 'next/link'
+import { Lock, Play, Rocket, Shield, Skull, Star, Zap } from 'lucide-react'
 
 const levels = [
   { id: 1, name: 'Órbita Inicial', difficulty: 'Fácil', tone: 'cyan', icon: Zap, unlocked: true, stars: 3 },
@@ -33,9 +34,9 @@ export default function Page() {
             <p className="font-mono text-xs tracking-[.35em] text-orange-300">VOID//ARCHER</p>
             <h1 className="mt-2 text-2xl font-black tracking-tight sm:text-4xl">Mapa de níveis</h1>
           </div>
-          <div className="rounded-lg border border-cyan-300/30 bg-black/20 px-4 py-2 text-right font-mono text-xs text-white/60">
+          <div className="flex items-center gap-4"><Link href="/arena" className="inline-flex items-center gap-2 rounded-xl border border-orange-300/60 bg-orange-400 px-4 py-2.5 text-sm font-black text-[#241044] transition hover:bg-orange-300"><Rocket className="size-4" /> Ir para arena</Link><div className="rounded-lg border border-cyan-300/30 bg-black/20 px-4 py-2 text-right font-mono text-xs text-white/60">
             <p>PROGRESSO</p><strong className="text-lg text-cyan-200">3 / 6</strong>
-          </div>
+          </div></div>
         </header>
 
         <section className="relative flex flex-1 flex-col justify-center py-10">

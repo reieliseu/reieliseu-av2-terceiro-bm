@@ -7,9 +7,9 @@ const levels = [
   { id: 1, name: 'Órbita Inicial', difficulty: 'Fácil', tone: 'cyan', icon: Zap, unlocked: true, stars: 3 },
   { id: 2, name: 'Campo de Detritos', difficulty: 'Fácil', tone: 'cyan', icon: Shield, unlocked: true, stars: 2 },
   { id: 3, name: 'Estação Abandonada', difficulty: 'Médio', tone: 'violet', icon: Star, unlocked: true, stars: 1 },
-  { id: 4, name: 'Cinturão Sombrio', difficulty: 'Médio', tone: 'violet', icon: Skull, unlocked: false, stars: 0 },
-  { id: 5, name: 'Núcleo Inimigo', difficulty: 'Difícil', tone: 'orange', icon: Skull, unlocked: false, stars: 0 },
-  { id: 6, name: 'Última Fronteira', difficulty: 'Insano', tone: 'red', icon: Skull, unlocked: false, stars: 0 },
+  { id: 4, name: 'Cinturão Sombrio', difficulty: 'Médio', tone: 'violet', icon: Skull, unlocked: true, stars: 0 },
+  { id: 5, name: 'Núcleo Inimigo', difficulty: 'Difícil', tone: 'orange', icon: Skull, unlocked: true, stars: 0 },
+  { id: 6, name: 'Última Fronteira', difficulty: 'Insano', tone: 'red', icon: Skull, unlocked: true, stars: 0 },
 ]
 
 const toneStyles = {
@@ -21,6 +21,7 @@ const toneStyles = {
 
 export default function Page() {
   const [selected, setSelected] = useState(1)
+  const [message, setMessage] = useState('Escolha uma missão para começar.')
   const current = levels.find((level) => level.id === selected) ?? levels[0]
   const Icon = current.icon
 
@@ -62,7 +63,7 @@ export default function Page() {
 
         <footer className="flex flex-col gap-5 border-t border-white/10 pt-5 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-4"><div className={`grid size-14 place-items-center rounded-xl border ${toneStyles[current.tone as keyof typeof toneStyles]}`}><Icon className="size-7" /></div><div><p className="text-xs uppercase tracking-[.2em] text-white/45">Selecionado</p><p className="text-lg font-bold">{current.name}</p></div></div>
-          <button type="button" disabled={!current.unlocked} className="inline-flex items-center justify-center gap-3 rounded-xl bg-orange-400 px-7 py-3 font-black text-[#241044] transition hover:bg-orange-300 disabled:cursor-not-allowed disabled:opacity-40"><Play className="size-5 fill-current" /> Jogar nível {current.id}</button>
+          <div className="flex flex-col items-stretch gap-2 sm:items-end"><button type="button" disabled={!current.unlocked} onClick={() => setMessage(`Nível ${current.id} iniciado: ${current.name}. Boa missão!`)} className="inline-flex items-center justify-center gap-3 rounded-xl bg-orange-400 px-7 py-3 font-black text-[#241044] transition hover:bg-orange-300 disabled:cursor-not-allowed disabled:opacity-40"><Play className="size-5 fill-current" /> Jogar nível {current.id}</button><p role="status" className="text-right text-xs text-cyan-200">{message}</p></div>
         </footer>
       </div>
     </main>

@@ -3,8 +3,8 @@ import type { Metadata, Viewport } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Colportagem Stor — Livros e cursos com propósito',
-  description: 'Catálogo de cursos e literaturas evangelisticos.',
+  title: 'Academia Colportagem — Plataforma de estudos',
+  description: 'Plataforma de estudos com trilhas, cursos e materiais para aprender no seu ritmo.',
   generator: 'v0.app',
   icons: {
     icon: [
@@ -29,7 +29,7 @@ export const viewport: Viewport = {
   colorScheme: 'light dark',
   themeColor: [
     { media: '(prefers-color-scheme: light)', color: 'white' },
-    { media: '(prefers-color-scheme: dark)', color: 'black' },
+    { media: '(prefers-color-scheme: dark)', color: '#0d2a5c' },
   ],
 }
 

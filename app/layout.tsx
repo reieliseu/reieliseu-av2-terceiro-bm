@@ -4,7 +4,7 @@ import './globals.css'
 
 export const metadata: Metadata = {
   title: 'Colportagem Stor — Livros e cursos com propósito',
-  description: 'Catálogo de livros e cursos para uma colportagem com conhecimento, ética e propósito.',
+  description: 'Catálogo de cursos e literaturas evangelisticos.',
   generator: 'v0.app',
   icons: {
     icon: [

@@ -3,7 +3,7 @@ import type { Metadata, Viewport } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Academia Colportagem — Plataforma de estudos',
+  title: 'Mentor Estudantil — Plataforma de estudos',
   description: 'Plataforma de estudos com trilhas, cursos e materiais para aprender no seu ritmo.',
   generator: 'v0.app',
   icons: {

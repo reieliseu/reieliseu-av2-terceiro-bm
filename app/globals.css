@@ -78,9 +78,10 @@
 
 @layer base {
   * { @apply border-border outline-ring/50; }
-  body { @apply bg-background text-foreground antialiased; }
+  body { @apply bg-background text-foreground antialiased; background-image: radial-gradient(circle at 8% 0%, color-mix(in oklab, var(--primary) 12%, transparent), transparent 30rem), radial-gradient(circle at 92% 100%, color-mix(in oklab, var(--accent) 10%, transparent), transparent 28rem); }
 }
 
 @layer utilities {
-  .shadow-editorial { box-shadow: 0 22px 60px -28px oklch(0.25 0.07 154 / 0.45); }
+  .shadow-editorial { box-shadow: 0 24px 70px -30px color-mix(in oklab, var(--primary) 45%, transparent); }
+  .glass-panel { background: color-mix(in oklab, var(--card) 78%, transparent); border: 1px solid color-mix(in oklab, var(--foreground) 10%, transparent); box-shadow: 0 18px 60px -32px color-mix(in oklab, var(--primary) 38%, transparent); backdrop-filter: blur(18px); }
 }

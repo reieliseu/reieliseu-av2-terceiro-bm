@@ -11,23 +11,23 @@ type Produto = { id: number; titulo: string; categoria: 'Livros' | 'Cursos'; des
 type ItemCarrinho = Produto & { quantidade: number }
 
 const produtos: Produto[] = [
-  { id: 1, titulo: 'O Colportor de Sucesso', categoria: 'Livros', descricao: 'Acompanhe a jornada de quem descobriu que cada encontro pode abrir portas para uma vida transformada.', formato: 'Livro físico · 184 páginas', preco: 49.9, destaque: true },
+  { id: 1, titulo: 'Estudante de Sucesso', categoria: 'Livros', descricao: 'Acompanhe a jornada de quem descobriu que cada encontro pode abrir portas para uma vida transformada.', formato: 'Livro físico · 184 páginas', preco: 49.9, destaque: true },
   { id: 2, titulo: 'Conversas que Inspiram', categoria: 'Livros', descricao: 'Conheça histórias de encontros simples que se tornaram pontes de esperança, confiança e novas escolhas.', formato: 'E-book · PDF', preco: 24.9 },
-  { id: 3, titulo: 'Colportagem na Prática', categoria: 'Cursos', descricao: 'Siga os primeiros passos de um novo colportor enquanto ele aprende a planejar visitas e transformar metas em conquistas.', formato: 'Curso online · 8 aulas', preco: 89.9, destaque: true },
+  { id: 3, titulo: 'Aprendizado na Prática', categoria: 'Cursos', descricao: 'Siga os primeiros passos de um novo estudante enquanto ele aprende a planejar visitas e transformar metas em conquistas.', formato: 'Curso online · 8 aulas', preco: 89.9, destaque: true },
   { id: 4, titulo: 'Comunicação e Propósito', categoria: 'Cursos', descricao: 'Descubra como ouvir melhor, falar com clareza e conduzir cada conversa com segurança e intenção.', formato: 'Curso online · 5 aulas', preco: 69.9 },
   { id: 5, titulo: 'Manual de Vendas com Propósito', categoria: 'Livros', descricao: 'Uma história sobre ética, serviço e escolhas conscientes para quem acredita que vender também é cuidar.', formato: 'Livro físico · 212 páginas', preco: 59.9 },
-  { id: 6, titulo: 'Jornada do Novo Colportor', categoria: 'Cursos', descricao: 'Viva uma trilha de aprendizado que acompanha desafios reais e mostra como começar com confiança e constância.', formato: 'Curso online · 10 aulas', preco: 119.9 },
+  { id: 6, titulo: 'Jornada do Novo Estudante', categoria: 'Cursos', descricao: 'Viva uma trilha de aprendizado que acompanha desafios reais e mostra como começar com confiança e constância.', formato: 'Curso online · 10 aulas', preco: 119.9 },
   { id: 7, titulo: 'Liderança que Serve', categoria: 'Cursos', descricao: 'Aprenda a conduzir equipes com humildade, clareza e foco em resultados que fazem sentido.', formato: 'Curso online · 6 aulas', preco: 79.9 },
   { id: 8, titulo: 'O Poder da Escuta', categoria: 'Livros', descricao: 'Uma leitura prática sobre empatia, presença e diálogos que criam conexões verdadeiras.', formato: 'E-book · PDF', preco: 29.9 },
   { id: 9, titulo: 'Planejamento de Campo', categoria: 'Cursos', descricao: 'Organize sua rotina, suas visitas e suas metas para aproveitar melhor cada dia de trabalho.', formato: 'Curso online · 4 aulas', preco: 54.9 },
   { id: 10, titulo: 'Histórias que Transformam', categoria: 'Livros', descricao: 'Relatos de encontros marcantes que mostram como pequenas atitudes podem mudar grandes jornadas.', formato: 'Livro físico · 168 páginas', preco: 44.9, destaque: true },
-  { id: 11, titulo: 'Finanças para Colportores', categoria: 'Cursos', descricao: 'Construa uma relação saudável com dinheiro, planejamento e sustentabilidade na sua missão.', formato: 'Curso online · 7 aulas', preco: 64.9 },
+  { id: 11, titulo: 'Finanças Pessoais', categoria: 'Cursos', descricao: 'Construa uma relação saudável com dinheiro, planejamento e sustentabilidade na sua missão.', formato: 'Curso online · 7 aulas', preco: 64.9 },
   { id: 12, titulo: 'Guia de Abordagem', categoria: 'Livros', descricao: 'Técnicas simples para iniciar conversas com respeito, naturalidade e confiança.', formato: 'Livro físico · 136 páginas', preco: 39.9 },
   { id: 13, titulo: 'Marketing com Verdade', categoria: 'Cursos', descricao: 'Descubra como comunicar seu trabalho com autenticidade e alcançar as pessoas certas.', formato: 'Curso online · 5 aulas', preco: 74.9 },
   { id: 14, titulo: 'Diálogos de Esperança', categoria: 'Livros', descricao: 'Reflexões para quem deseja levar mensagens positivas e construir pontes em cada encontro.', formato: 'E-book · PDF', preco: 19.9 },
-  { id: 15, titulo: 'Mentoria para Novos Colportores', categoria: 'Cursos', descricao: 'Uma trilha guiada para acelerar seu aprendizado e enfrentar os primeiros desafios com apoio.', formato: 'Curso online · 9 aulas', preco: 99.9, destaque: true },
+  { id: 15, titulo: 'Mentoria para Novos Estudantes', categoria: 'Cursos', descricao: 'Uma trilha guiada para acelerar seu aprendizado e enfrentar os primeiros desafios com apoio.', formato: 'Curso online · 9 aulas', preco: 99.9, destaque: true },
   { id: 16, titulo: 'Caderno de Metas', categoria: 'Livros', descricao: 'Planeje sua semana, acompanhe seus avanços e transforme intenção em constância.', formato: 'Livro físico · 96 páginas', preco: 27.9 },
-  { id: 17, titulo: 'Rotina de Alta Performance', categoria: 'Cursos', descricao: 'Organize energia, foco e prioridades para manter uma rotina consistente em cada etapa da colportagem.', formato: 'Curso online · 6 aulas', preco: 69.9 },
+  { id: 17, titulo: 'Rotina de Alta Performance', categoria: 'Cursos', descricao: 'Organize energia, foco e prioridades para manter uma rotina consistente em cada etapa do aprendizado.', formato: 'Curso online · 6 aulas', preco: 69.9 },
   { id: 18, titulo: 'Cartas para uma Nova Jornada', categoria: 'Livros', descricao: 'Mensagens curtas para inspirar decisões corajosas, recomeços e encontros cheios de significado.', formato: 'Livro físico · 120 páginas', preco: 34.9 },
 ]
 
@@ -36,7 +36,7 @@ const dinheiro = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: '
 const historias: Record<number, string> = {
   1: 'Acompanhe a transformação de alguém que começa inseguro, aprende a ouvir e descobre que o verdadeiro sucesso nasce quando conhecimento e serviço caminham juntos.',
   2: 'Entre conversas simples e encontros inesperados, esta história mostra como uma palavra atenciosa pode abrir espaço para esperança, confiança e novas escolhas.',
-  3: 'Conheça os primeiros desafios de um novo colportor: planejar visitas, superar receios e transformar cada meta em uma conquista construída com constância.',
+  3: 'Conheça os primeiros desafios de um novo estudante: planejar visitas, superar receios e transformar cada meta em uma conquista construída com constância.',
   4: 'Uma jornada sobre escuta, clareza e propósito. O conteúdo acompanha situações reais para mostrar como cada conversa pode ser conduzida com mais segurança.',
   5: 'Uma narrativa sobre ética, cuidado e responsabilidade, lembrando que vender com propósito é entender necessidades e oferecer valor de forma honesta.',
   6: 'Siga uma trilha completa de aprendizado, do primeiro planejamento aos dias de campo, acompanhando escolhas, erros e pequenas vitórias de quem está começando.',
@@ -48,7 +48,7 @@ const historias: Record<number, string> = {
   12: 'Aprenda a iniciar conversas de forma natural, respeitosa e confiante, encontrando a melhor abordagem para cada pessoa e cada contexto.',
   13: 'Uma história sobre comunicar com verdade: apresentar seu trabalho, criar presença e alcançar pessoas sem abrir mão da autenticidade.',
   14: 'Reflexões breves para dias corridos, com mensagens que encorajam recomeços e ajudam a levar esperança para cada novo encontro.',
-  15: 'Uma trilha acompanhada para os primeiros passos, com orientação, exercícios e decisões que ajudam novos colportores a avançar com confiança.',
+  15: 'Uma trilha acompanhada para os primeiros passos, com orientação, exercícios e decisões que ajudam novos estudantees a avançar com confiança.',
   16: 'Mais do que um caderno, um espaço para transformar planos em hábitos, registrar aprendizados e enxergar o progresso de cada semana.',
   17: 'Uma jornada para organizar foco, energia e prioridades, criando uma rotina possível e sustentável para fazer cada dia render melhor.',
   18: 'Cartas curtas para acompanhar recomeços, lembrar o valor de cada passo e inspirar coragem quando uma nova jornada está apenas começando.',

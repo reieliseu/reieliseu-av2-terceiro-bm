@@ -11,12 +11,12 @@ type Produto = { id: number; titulo: string; categoria: 'Livros' | 'Cursos'; des
 type ItemCarrinho = Produto & { quantidade: number }
 
 const produtos: Produto[] = [
-  { id: 1, titulo: 'Estudante de Sucesso', categoria: 'Livros', descricao: 'Acompanhe a jornada de quem descobriu que cada encontro pode abrir portas para uma vida transformada.', formato: 'Livro físico · 184 páginas', preco: 49.9, destaque: true },
-  { id: 2, titulo: 'Conversas que Inspiram', categoria: 'Livros', descricao: 'Conheça histórias de encontros simples que se tornaram pontes de esperança, confiança e novas escolhas.', formato: 'E-book · PDF', preco: 24.9 },
-  { id: 3, titulo: 'Aprendizado na Prática', categoria: 'Cursos', descricao: 'Siga os primeiros passos de um novo estudante enquanto ele aprende a planejar visitas e transformar metas em conquistas.', formato: 'Curso online · 8 aulas', preco: 89.9, destaque: true },
-  { id: 4, titulo: 'Comunicação e Propósito', categoria: 'Cursos', descricao: 'Descubra como ouvir melhor, falar com clareza e conduzir cada conversa com segurança e intenção.', formato: 'Curso online · 5 aulas', preco: 69.9 },
-  { id: 5, titulo: 'Manual de Vendas com Propósito', categoria: 'Livros', descricao: 'Uma história sobre ética, serviço e escolhas conscientes para quem acredita que vender também é cuidar.', formato: 'Livro físico · 212 páginas', preco: 59.9 },
-  { id: 6, titulo: 'Jornada do Novo Estudante', categoria: 'Cursos', descricao: 'Viva uma trilha de aprendizado que acompanha desafios reais e mostra como começar com confiança e constância.', formato: 'Curso online · 10 aulas', preco: 119.9 },
+  { id: 1, titulo: 'Fundamentos do Estudo', categoria: 'Livros', descricao: 'Construa uma base sólida para aprender com clareza, constância e propósito.', formato: 'Livro físico · 184 páginas', preco: 49.9, destaque: true },
+  { id: 2, titulo: 'Leitura e Aprendizado', categoria: 'Livros', descricao: 'Conheça histórias de encontros simples que se tornaram pontes de esperança, confiança e novas escolhas.', formato: 'E-book · PDF', preco: 24.9 },
+  { id: 3, titulo: 'Estudo na Prática', categoria: 'Cursos', descricao: 'Aprenda a organizar uma rotina de estudos e transformar metas em conquistas.', formato: 'Curso online · 8 aulas', preco: 89.9, destaque: true },
+  { id: 4, titulo: 'Comunicação para Estudos', categoria: 'Cursos', descricao: 'Descubra como ouvir melhor, falar com clareza e conduzir cada conversa com segurança e intenção.', formato: 'Curso online · 5 aulas', preco: 69.9 },
+  { id: 5, titulo: 'Organização e Foco', categoria: 'Livros', descricao: 'Estratégias simples para manter o foco, organizar o tempo e estudar melhor.', formato: 'Livro físico · 212 páginas', preco: 59.9 },
+  { id: 6, titulo: 'Jornada de Aprendizagem', categoria: 'Cursos', descricao: 'Viva uma trilha de aprendizado que acompanha desafios reais e mostra como começar com confiança e constância.', formato: 'Curso online · 10 aulas', preco: 119.9 },
   { id: 7, titulo: 'Liderança que Serve', categoria: 'Cursos', descricao: 'Aprenda a conduzir equipes com humildade, clareza e foco em resultados que fazem sentido.', formato: 'Curso online · 6 aulas', preco: 79.9 },
   { id: 8, titulo: 'O Poder da Escuta', categoria: 'Livros', descricao: 'Uma leitura prática sobre empatia, presença e diálogos que criam conexões verdadeiras.', formato: 'E-book · PDF', preco: 29.9 },
   { id: 9, titulo: 'Planejamento de Campo', categoria: 'Cursos', descricao: 'Organize sua rotina, suas visitas e suas metas para aproveitar melhor cada dia de trabalho.', formato: 'Curso online · 4 aulas', preco: 54.9 },

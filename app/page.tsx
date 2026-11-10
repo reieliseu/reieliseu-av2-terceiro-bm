@@ -81,7 +81,19 @@ export default function Page() {
   const [catalogo, setCatalogo] = useState<Produto[]>(produtos)
 
   useEffect(() => {
-    const carregarCatalogo = async () => {
+  const ignorarResizeObserverLoop = (event: ErrorEvent) => {
+    if (event.message.includes('ResizeObserver loop completed with undelivered notifications')) {
+      event.preventDefault()
+      event.stopImmediatePropagation()
+    }
+  }
+
+  window.addEventListener('error', ignorarResizeObserverLoop)
+  return () => window.removeEventListener('error', ignorarResizeObserverLoop)
+  }, [])
+
+  useEffect(() => {
+  const carregarCatalogo = async () => {
       try {
         const response = await fetch('/api/products', { cache: 'no-store' })
         if (!response.ok) throw new Error('Falha ao carregar catálogo')

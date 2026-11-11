@@ -5,10 +5,11 @@ import { ArrowRight, BookOpen, LoaderCircle, LockKeyhole, Mail, UserRound } from
 import { apiRequest, type AuthResponse } from "@/lib/api"
 
 type AuthPanelProps = {
+  notice?: string
   onAuthenticated: (auth: AuthResponse) => void
 }
 
-export function AuthPanel({ onAuthenticated }: AuthPanelProps) {
+export function AuthPanel({ notice, onAuthenticated }: AuthPanelProps) {
   const [mode, setMode] = useState<"login" | "register">("login")
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
@@ -118,6 +119,7 @@ export function AuthPanel({ onAuthenticated }: AuthPanelProps) {
               </span>
             </label>
 
+            {notice && <p className="rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-800" role="status">{notice}</p>}
             {error && <p className="rounded-xl bg-rose-50 px-4 py-3 text-sm text-rose-700" role="alert">{error}</p>}
 
             <button

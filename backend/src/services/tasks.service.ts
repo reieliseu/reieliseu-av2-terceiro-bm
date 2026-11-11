@@ -86,7 +86,14 @@ export async function listTasks(userId: string, filters: { status?: string; subj
 export async function createTask(userId: string, input: TaskInput & { title: string; subject: string; status: string; priority: string }) {
   await validateParent(userId, undefined, input.parentId)
   return prisma.studyTask.create({
-    data: { ...mapInput(input), userId },
+    data: {
+      ...mapInput(input),
+      title: input.title,
+      subject: input.subject,
+      status: input.status,
+      priority: input.priority,
+      userId,
+    },
     select: taskSelect,
   })
 }

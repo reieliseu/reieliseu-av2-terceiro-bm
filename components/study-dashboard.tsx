@@ -3,7 +3,7 @@
 import { useDeferredValue, useEffect, useMemo, useState } from "react"
 import useSWR from "swr"
 import { BookOpen, CalendarDays, CheckCheck, CirclePlus, GraduationCap, LayoutDashboard, ListTodo, LoaderCircle, LogOut, Search, TrendingUp } from "lucide-react"
-import { apiRequest, API_BASE_URL, type AuthResponse, type StudyTask, type TaskStatus, type User } from "@/lib/api"
+import { apiRequest, API_BASE_URL, type ApiError, type AuthResponse, type StudyTask, type TaskStatus, type User } from "@/lib/api"
 import { AuthPanel } from "@/components/auth-panel"
 import { TaskCard } from "@/components/task-card"
 import { TaskForm, type TaskInput } from "@/components/task-form"
@@ -27,6 +27,7 @@ export function StudyDashboard() {
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [editingTask, setEditingTask] = useState<StudyTask | null>(null)
   const [mutationError, setMutationError] = useState("")
+  const [authNotice, setAuthNotice] = useState("")
 
   useEffect(() => {
     const storedToken = window.sessionStorage.getItem("study-access-token")
@@ -37,9 +38,10 @@ export function StudyDashboard() {
     setToken(storedToken)
     apiRequest<User>("/auth/me", storedToken)
       .then(setUser)
-      .catch(() => {
+      .catch((cause) => {
         window.sessionStorage.removeItem("study-access-token")
         setToken(null)
+        setAuthNotice(cause instanceof Error ? cause.message : "Não foi possível validar sua sessão.")
       })
       .finally(() => setIsReady(true))
   }, [])
@@ -61,6 +63,7 @@ export function StudyDashboard() {
     window.sessionStorage.setItem("study-access-token", auth.token)
     setToken(auth.token)
     setUser(auth.user)
+    setAuthNotice("")
   }
 
   function signOut() {
@@ -68,7 +71,14 @@ export function StudyDashboard() {
     setToken(null)
     setUser(null)
     setMutationError("")
+    setAuthNotice("")
   }
+
+  useEffect(() => {
+    if (!token || (loadError as ApiError | undefined)?.status !== 401) return
+    signOut()
+    setAuthNotice("Sua sessão expirou. Entre novamente para continuar.")
+  }, [loadError, token])
 
   async function saveTask(input: TaskInput, taskId?: string) {
     if (!token) return
@@ -110,7 +120,7 @@ export function StudyDashboard() {
     return <main className="grid min-h-screen place-items-center bg-[#f4f8ff]"><LoaderCircle className="animate-spin text-blue-700" size={28} aria-label="Carregando sessão" /></main>
   }
 
-  if (!token || !user) return <AuthPanel onAuthenticated={authenticate} />
+  if (!token || !user) return <AuthPanel notice={authNotice} onAuthenticated={authenticate} />
 
   const completedCount = tasks.filter((task) => task.status === "COMPLETED").length
   const pendingCount = tasks.filter((task) => task.status === "PENDING").length

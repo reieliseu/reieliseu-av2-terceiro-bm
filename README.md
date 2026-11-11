@@ -25,13 +25,13 @@ Aplicação full stack para organizar tarefas de estudo por matéria, prazo, pri
    ```
 
 2. Copie `.env.example` para `.env` e configure `DATABASE_URL` com a conexão PostgreSQL e `JWT_SECRET` com um segredo aleatório de pelo menos 32 caracteres. Não envie `.env` ao repositório.
-3. Gere o cliente e aplique as migrations:
+3. Gere o cliente Prisma:
 
    ```bash
    pnpm prisma:generate
-   pnpm prisma:migrate
    ```
 
+   A migration versionada foi preparada para o Neon e será aplicada pelo fluxo de migration da integração após aprovação. Mudanças futuras no schema também devem ser aplicadas via Neon MCP; não execute `prisma migrate deploy` contra este projeto.
 4. Inicie a interface e a API em processos de desenvolvimento:
 
    ```bash
@@ -85,7 +85,7 @@ backend/src/
   middleware/                 JWT, rate limit, erros e tipos Express
   validators/                 Schemas Zod
 prisma/schema.prisma          Modelos relacionais
-prisma/migrations/             Migration SQL versionada
+prisma/migrations/             SQL versionado; alterações aplicadas via Neon MCP
 ```
 
 ## Variáveis de ambiente

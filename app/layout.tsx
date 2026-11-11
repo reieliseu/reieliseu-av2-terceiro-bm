@@ -4,7 +4,7 @@ import './globals.css'
 
 export const metadata: Metadata = {
   title: 'Mentor Estudantil — Plataforma de estudos',
-  description: 'Plataforma de estudos com trilhas, cursos e materiais para aprender no seu ritmo.',
+  description: 'Organize tarefas de estudo, matérias, prioridades e prazos em um único lugar.',
   generator: 'v0.app',
   icons: {
     icon: [
@@ -26,11 +26,8 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  colorScheme: 'light dark',
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: 'white' },
-    { media: '(prefers-color-scheme: dark)', color: '#0d2a5c' },
-  ],
+  colorScheme: 'light',
+  themeColor: '#f4f8ff',
 }
 
 export default function RootLayout({

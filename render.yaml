@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: mentor-estudantil-api
+    runtime: node
+    plan: free
+    buildCommand: pnpm install --frozen-lockfile && pnpm prisma:generate && pnpm api:typecheck
+    startCommand: pnpm api:start
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: FRONTEND_URL
+        sync: false
+      - key: ALLOWED_ORIGINS
+        sync: false

@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../backend/src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id           String      @id @default(uuid()) @db.Uuid
+  name         String      @db.VarChar(100)
+  email        String      @unique @db.VarChar(254)
+  passwordHash String      @map("password_hash") @db.VarChar(255)
+  createdAt    DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)
+  tasks        StudyTask[]
+
+  @@map("app_users")
+}
+
+model StudyTask {
+  id          String      @id @default(uuid()) @db.Uuid
+  title       String      @db.VarChar(160)
+  description String?
+  subject     String      @db.VarChar(100)
+  status      String      @default("PENDING") @db.VarChar(20)
+  priority    String      @default("MEDIUM") @db.VarChar(20)
+  dueDate     DateTime?   @map("due_date") @db.Timestamptz(6)
+  userId      String      @map("user_id") @db.Uuid
+  parentId    String?     @map("parent_id") @db.Uuid
+  createdAt   DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime    @updatedAt @map("updated_at") @db.Timestamptz(6)
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  parent      StudyTask?  @relation("TaskHierarchy", fields: [parentId], references: [id], onDelete: Restrict)
+  subtasks    StudyTask[] @relation("TaskHierarchy")
+
+  @@index([userId, status])
+  @@index([userId, dueDate])
+  @@index([parentId])
+  @@map("study_tasks")
+}

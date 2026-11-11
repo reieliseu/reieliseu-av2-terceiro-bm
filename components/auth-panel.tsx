@@ -56,7 +56,7 @@ export function AuthPanel({ notice, onAuthenticated }: AuthPanelProps) {
             </h1>
             <p className="mt-3 leading-relaxed text-slate-600">
               {mode === "login"
-                ? "Entre para acessar suas aulas, cursos e trilhas de aprendizado."
+                ? "Entre para organizar tarefas, acompanhar prazos e retomar seu plano de estudos."
                 : "Organize seus estudos e acompanhe cada conquista."}
             </p>
           </div>

@@ -9,6 +9,7 @@
     "api:dev": "tsx watch backend/src/server.ts",
     "api:start": "tsx backend/src/server.ts",
     "api:typecheck": "tsc --noEmit --project backend/tsconfig.json",
+    "test": "tsx --test backend/src/validators/*.test.ts",
     "prisma:generate": "prisma generate"
   },
   "dependencies": {

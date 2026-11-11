@@ -31,7 +31,7 @@ Aplicação full stack para organizar tarefas de estudo por matéria, prazo, pri
    pnpm prisma:generate
    ```
 
-   A migration versionada foi preparada para o Neon e será aplicada pelo fluxo de migration da integração após aprovação. Mudanças futuras no schema também devem ser aplicadas via Neon MCP; não execute `prisma migrate deploy` contra este projeto.
+   A migration versionada já foi aplicada ao branch principal do Neon. Mudanças futuras no schema devem ser aplicadas via Neon MCP; não execute `prisma migrate deploy` contra este projeto.
 4. Inicie a interface e a API em processos de desenvolvimento:
 
    ```bash
@@ -40,9 +40,13 @@ Aplicação full stack para organizar tarefas de estudo por matéria, prazo, pri
 
    A interface inicia em `http://localhost:3000` e a API Express em `http://localhost:4000`. Para iniciar apenas a API: `pnpm api:dev`.
 
+## Testes automatizados
+
+Execute `pnpm test` para validar os schemas de cadastro/login e as regras de validação do CRUD. Execute `pnpm api:typecheck` para checar os tipos do backend. A validação de ponta a ponta com o banco deve ser feita após configurar o ambiente e publicar a API; o roteiro está na seção Publicação.
+
 ## API REST
 
-Prefixo: `/api/v1`. Todas as respostas são JSON. Exceto saúde, as rotas de tarefas e `/auth/me` exigem `Authorization: Bearer <token>`.
+Prefixo: `/api/v1`. Todas as respostas são JSON. Exceto saúde, as rotas de tarefas e `/auth/me` exigem `Authorization: Bearer <token>`. 
 
 | Método | Rota | Acesso | Descrição |
 | --- | --- | --- | --- |

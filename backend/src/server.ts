@@ -1,24 +1,36 @@
-import "dotenv/config"
-import app from "./app"
-import { prisma } from "./lib/prisma"
+import { config as loadEnv } from "dotenv"
 
-const port = Number(process.env.PORT ?? 4000)
-const jwtSecret = process.env.JWT_SECRET
+loadEnv({ path: ".env.development.local" })
+loadEnv()
 
-if (!jwtSecret || jwtSecret.length < 32) {
-  throw new Error("Configure JWT_SECRET com pelo menos 32 caracteres antes de iniciar a API.")
-}
+async function startServer() {
+  const [{ default: app }, { prisma }] = await Promise.all([
+    import("./app"),
+    import("./lib/prisma"),
+  ])
+  const port = Number(process.env.PORT ?? 4000)
+  const jwtSecret = process.env.JWT_SECRET
 
-const server = app.listen(port, () => {
-  console.info(`[api] API Express disponível na porta ${port}.`)
-})
+  if (!jwtSecret || jwtSecret.length < 32) {
+    throw new Error("Configure JWT_SECRET com pelo menos 32 caracteres antes de iniciar a API.")
+  }
 
-async function shutdown() {
-  server.close(async () => {
-    await prisma.$disconnect()
-    process.exit(0)
+  const server = app.listen(port, () => {
+    console.info(`[api] API Express disponível na porta ${port}.`)
   })
+
+  async function shutdown() {
+    server.close(async () => {
+      await prisma.$disconnect()
+      process.exit(0)
+    })
+  }
+
+  process.once("SIGINT", shutdown)
+  process.once("SIGTERM", shutdown)
 }
 
-process.once("SIGINT", shutdown)
-process.once("SIGTERM", shutdown)
+void startServer().catch((error) => {
+  console.error("[api] Não foi possível iniciar o servidor.", error)
+  process.exitCode = 1
+})

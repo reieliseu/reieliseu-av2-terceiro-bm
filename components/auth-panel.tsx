@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, type FormEvent } from "react"
-import { ArrowRight, BookOpen, LoaderCircle, LockKeyhole, Mail, UserRound } from "lucide-react"
+import { ArrowRight, BookOpen, Eye, EyeOff, LoaderCircle, LockKeyhole, Mail, UserRound } from "lucide-react"
 import { apiRequest, type AuthResponse } from "@/lib/api"
 
 type AuthPanelProps = {
@@ -14,6 +14,7 @@ export function AuthPanel({ notice, onAuthenticated }: AuthPanelProps) {
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -100,15 +101,16 @@ export function AuthPanel({ notice, onAuthenticated }: AuthPanelProps) {
               </span>
             </label>
 
-            <label className="block text-left text-sm font-medium text-slate-800">
-              Senha
+            <div className="block text-left text-sm font-medium text-slate-800">
+              <label htmlFor="auth-password">Senha</label>
               <span className="relative mt-2 block">
                 <LockKeyhole className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={17} aria-hidden="true" />
                 <input
-                  className="h-12 w-full rounded-2xl border border-blue-200 bg-white pl-11 pr-4 outline-none transition placeholder:text-slate-400 focus:border-blue-600 focus:ring-4 focus:ring-blue-100"
+                  id="auth-password"
+                  className="h-12 w-full rounded-2xl border border-blue-200 bg-white pl-11 pr-12 outline-none transition placeholder:text-slate-400 focus:border-blue-600 focus:ring-4 focus:ring-blue-100"
                   autoComplete={mode === "login" ? "current-password" : "new-password"}
                   name="password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(event) => setPassword(event.target.value)}
                   placeholder="Mínimo de 8 caracteres"
@@ -116,8 +118,18 @@ export function AuthPanel({ notice, onAuthenticated }: AuthPanelProps) {
                   maxLength={128}
                   required
                 />
+                <button
+                  aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
+                  aria-pressed={showPassword}
+                  aria-controls="auth-password"
+                  className="absolute right-2 top-1/2 grid size-9 -translate-y-1/2 place-items-center rounded-xl text-slate-500 transition hover:bg-blue-50 hover:text-blue-700 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-100"
+                  type="button"
+                  onClick={() => setShowPassword((current) => !current)}
+                >
+                  {showPassword ? <EyeOff size={17} aria-hidden="true" /> : <Eye size={17} aria-hidden="true" />}
+                </button>
               </span>
-            </label>
+            </div>
 
             {notice && <p className="rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-800" role="status">{notice}</p>}
             {error && <p className="rounded-xl bg-rose-50 px-4 py-3 text-sm text-rose-700" role="alert">{error}</p>}
@@ -138,6 +150,7 @@ export function AuthPanel({ notice, onAuthenticated }: AuthPanelProps) {
               type="button"
               onClick={() => {
                 setMode(mode === "login" ? "register" : "login")
+                setShowPassword(false)
                 setError("")
               }}
             >

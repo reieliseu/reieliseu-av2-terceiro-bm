@@ -2,7 +2,7 @@
 
 import { useState, type FormEvent } from "react"
 import { ArrowRight, BookOpen, Eye, EyeOff, LoaderCircle, LockKeyhole, Mail, UserRound } from "lucide-react"
-import { apiRequest, type AuthResponse } from "@/lib/api"
+import { apiRequest, type ApiError, type AuthResponse } from "@/lib/api"
 
 type AuthPanelProps = {
   notice?: string
@@ -41,7 +41,14 @@ export function AuthPanel({ notice, onAuthenticated, onGuestAccess }: AuthPanelP
       })
       onAuthenticated(auth)
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : "Não foi possível entrar. Tente novamente.")
+      const status = cause instanceof Error ? (cause as ApiError).status : undefined
+      setError(
+        mode === "register" && status === 409
+          ? "Este e-mail já está cadastrado. Clique em “Entrar” abaixo ou use outro e-mail."
+          : cause instanceof Error
+            ? cause.message
+            : "Não foi possível entrar. Tente novamente.",
+      )
     } finally {
       setIsSubmitting(false)
     }

@@ -17,11 +17,13 @@ export function TaskCard({
   onStatusChange,
   onEdit,
   onDelete,
+  readOnly = false,
 }: {
   task: StudyTask
   onStatusChange: (task: StudyTask, status: TaskStatus) => Promise<void>
   onEdit: (task: StudyTask) => void
   onDelete: (task: StudyTask) => Promise<void>
+  readOnly?: boolean
 }) {
   const [busy, setBusy] = useState(false)
   const [actionError, setActionError] = useState("")
@@ -70,25 +72,31 @@ export function TaskCard({
             {task.parent && <span>Subtarefa de {task.parent.title}</span>}
             {task._count.subtasks > 0 && <span>{task._count.subtasks} tarefa(s) vinculada(s)</span>}
           </div>
-          {actionError && <p className="mt-3 text-sm text-rose-700" role="alert">{actionError}</p>}
+          {actionError && !readOnly && <p className="mt-3 text-sm text-rose-700" role="alert">{actionError}</p>}
         </div>
         <div className="flex shrink-0 items-center gap-1">
-          <label className="sr-only" htmlFor={`status-${task.id}`}>Status de {task.title}</label>
-          <select
-            id={`status-${task.id}`}
-            className="max-w-32 rounded-lg border border-slate-200 bg-white px-2 py-2 text-xs font-medium text-slate-700 outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
-            value={task.status}
-            disabled={busy}
-            onChange={(event) => void changeStatus(event.target.value as TaskStatus)}
-          >
-            {Object.entries(statusLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
-          </select>
-          <button className="grid size-9 place-items-center rounded-lg text-slate-500 hover:bg-blue-50 hover:text-blue-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 disabled:opacity-50" type="button" aria-label={`Editar ${task.title}`} disabled={busy} onClick={() => onEdit(task)}>
-            <Pencil size={16} aria-hidden="true" />
-          </button>
-          <button className="grid size-9 place-items-center rounded-lg text-slate-500 hover:bg-rose-50 hover:text-rose-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-600 disabled:opacity-50" type="button" aria-label={`Excluir ${task.title}`} disabled={busy} onClick={() => void deleteTask()}>
-            <Trash2 size={16} aria-hidden="true" />
-          </button>
+          {readOnly ? (
+            <span className="rounded-full bg-slate-100 px-3 py-2 text-xs font-medium text-slate-600">{statusLabels[task.status]}</span>
+          ) : (
+            <>
+              <label className="sr-only" htmlFor={`status-${task.id}`}>Status de {task.title}</label>
+              <select
+                id={`status-${task.id}`}
+                className="max-w-32 rounded-lg border border-slate-200 bg-white px-2 py-2 text-xs font-medium text-slate-700 outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
+                value={task.status}
+                disabled={busy}
+                onChange={(event) => void changeStatus(event.target.value as TaskStatus)}
+              >
+                {Object.entries(statusLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+              </select>
+              <button className="grid size-9 place-items-center rounded-lg text-slate-500 hover:bg-blue-50 hover:text-blue-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 disabled:opacity-50" type="button" aria-label={`Editar ${task.title}`} disabled={busy} onClick={() => onEdit(task)}>
+                <Pencil size={16} aria-hidden="true" />
+              </button>
+              <button className="grid size-9 place-items-center rounded-lg text-slate-500 hover:bg-rose-50 hover:text-rose-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-600 disabled:opacity-50" type="button" aria-label={`Excluir ${task.title}`} disabled={busy} onClick={() => void deleteTask()}>
+                <Trash2 size={16} aria-hidden="true" />
+              </button>
+            </>
+          )}
         </div>
       </div>
     </article>

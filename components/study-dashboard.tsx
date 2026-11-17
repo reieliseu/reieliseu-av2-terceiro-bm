@@ -2,7 +2,7 @@
 
 import { useDeferredValue, useEffect, useMemo, useState } from "react"
 import useSWR from "swr"
-import { BookOpen, CalendarDays, CheckCheck, CirclePlus, GraduationCap, LayoutDashboard, ListTodo, LoaderCircle, LogOut, Search, TrendingUp } from "lucide-react"
+import { BookOpen, CalendarDays, CheckCheck, CirclePlus, Eye, GraduationCap, LayoutDashboard, ListTodo, LoaderCircle, LogOut, Search, TrendingUp } from "lucide-react"
 import { apiRequest, API_BASE_URL, type ApiError, type AuthResponse, type StudyTask, type TaskStatus, type User } from "@/lib/api"
 import { AuthPanel } from "@/components/auth-panel"
 import { TaskCard } from "@/components/task-card"
@@ -17,9 +17,66 @@ const filters: { id: Filter; label: string }[] = [
   { id: "COMPLETED", label: "Concluídas" },
 ]
 
+function createDemoTasks(): StudyTask[] {
+  const now = new Date()
+  const timestamp = now.toISOString()
+  const dueDate = (daysAhead: number) => {
+    const date = new Date(now)
+    date.setDate(date.getDate() + daysAhead)
+    return date.toISOString()
+  }
+
+  return [
+    {
+      id: "visitor-task-1",
+      title: "Revisar funções e gráficos",
+      description: "Refaça os exercícios principais e anote as dúvidas para a próxima aula.",
+      subject: "Matemática",
+      status: "IN_PROGRESS",
+      priority: "HIGH",
+      dueDate: dueDate(2),
+      parentId: null,
+      createdAt: timestamp,
+      updatedAt: timestamp,
+      parent: null,
+      _count: { subtasks: 2 },
+    },
+    {
+      id: "visitor-task-2",
+      title: "Ler capítulo sobre ecossistemas",
+      description: "Leia o capítulo e destaque os conceitos mais importantes.",
+      subject: "Biologia",
+      status: "PENDING",
+      priority: "MEDIUM",
+      dueDate: dueDate(4),
+      parentId: null,
+      createdAt: timestamp,
+      updatedAt: timestamp,
+      parent: null,
+      _count: { subtasks: 0 },
+    },
+    {
+      id: "visitor-task-3",
+      title: "Preparar resumo de história",
+      description: "Resumo sobre o período estudado nesta semana.",
+      subject: "História",
+      status: "COMPLETED",
+      priority: "LOW",
+      dueDate: null,
+      parentId: null,
+      createdAt: timestamp,
+      updatedAt: timestamp,
+      parent: null,
+      _count: { subtasks: 0 },
+    },
+  ]
+}
+
 export function StudyDashboard() {
   const [token, setToken] = useState<string | null>(null)
   const [user, setUser] = useState<User | null>(null)
+  const [isGuest, setIsGuest] = useState(false)
+  const [demoTasks, setDemoTasks] = useState<StudyTask[]>([])
   const [isReady, setIsReady] = useState(false)
   const [filter, setFilter] = useState<Filter>("ALL")
   const [query, setQuery] = useState("")
@@ -54,15 +111,35 @@ export function StudyDashboard() {
     return `${API_BASE_URL}/tasks${suffix}`
   }, [filter, deferredQuery])
 
-  const { data: tasks = [], error: loadError, isLoading, mutate } = useSWR(
+  const { data: accountTasks = [], error: loadError, isLoading, mutate } = useSWR(
     token ? [taskPath, token] as const : null,
     ([url, bearer]) => apiRequest<StudyTask[]>(url.slice(API_BASE_URL.length), bearer),
   )
+  const filteredDemoTasks = useMemo(() => {
+    const normalizedQuery = deferredQuery.toLowerCase()
+    return demoTasks.filter((task) => {
+      const matchesStatus = filter === "ALL" || task.status === filter
+      const searchableText = `${task.title} ${task.subject} ${task.description ?? ""}`.toLowerCase()
+      return matchesStatus && (!normalizedQuery || searchableText.includes(normalizedQuery))
+    })
+  }, [demoTasks, deferredQuery, filter])
+  const tasks = isGuest ? filteredDemoTasks : accountTasks
+  const isTasksLoading = !isGuest && isLoading
 
   function authenticate(auth: AuthResponse) {
     window.sessionStorage.setItem("study-access-token", auth.token)
+    setIsGuest(false)
+    setDemoTasks([])
     setToken(auth.token)
     setUser(auth.user)
+    setAuthNotice("")
+  }
+
+  function enterGuestMode() {
+    setToken(null)
+    setUser(null)
+    setDemoTasks(createDemoTasks())
+    setIsGuest(true)
     setAuthNotice("")
   }
 
@@ -70,6 +147,8 @@ export function StudyDashboard() {
     window.sessionStorage.removeItem("study-access-token")
     setToken(null)
     setUser(null)
+    setIsGuest(false)
+    setDemoTasks([])
     setMutationError("")
     setAuthNotice("")
   }
@@ -120,8 +199,12 @@ export function StudyDashboard() {
     return <main className="grid min-h-screen place-items-center bg-[#f4f8ff]"><LoaderCircle className="animate-spin text-blue-700" size={28} aria-label="Carregando sessão" /></main>
   }
 
-  if (!token || !user) return <AuthPanel notice={authNotice} onAuthenticated={authenticate} />
+  if ((!token || !user) && !isGuest) {
+    return <AuthPanel notice={authNotice} onAuthenticated={authenticate} onGuestAccess={enterGuestMode} />
+  }
 
+  const displayName = isGuest ? "Visitante" : user?.name ?? ""
+  const displayEmail = isGuest ? "Acesso de demonstração" : user?.email ?? ""
   const completedCount = tasks.filter((task) => task.status === "COMPLETED").length
   const pendingCount = tasks.filter((task) => task.status === "PENDING").length
   const inProgressCount = tasks.filter((task) => task.status === "IN_PROGRESS").length
@@ -136,8 +219,9 @@ export function StudyDashboard() {
             <span><span className="block text-xs font-bold uppercase tracking-[0.2em] text-blue-800">Mentor estudantil</span><span className="mt-0.5 block text-xs text-slate-500">Organizador de estudos</span></span>
           </a>
           <div className="flex items-center gap-3">
-            <div className="hidden text-right sm:block"><p className="text-sm font-semibold text-slate-900">Olá, {user.name}</p><p className="text-xs text-slate-500">{user.email}</p></div>
-            <button className="inline-flex h-10 items-center gap-2 rounded-xl border border-slate-200 px-3 text-sm font-medium text-slate-600 transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600" type="button" onClick={signOut}><LogOut size={16} aria-hidden="true" /><span className="hidden sm:inline">Sair</span></button>
+            <div className="hidden text-right sm:block"><p className="text-sm font-semibold text-slate-900">Olá, {displayName}</p><p className="text-xs text-slate-500">{displayEmail}</p></div>
+            {isGuest && <span className="hidden rounded-full bg-amber-50 px-3 py-1.5 text-xs font-semibold text-amber-800 sm:inline-flex">Modo visitante</span>}
+            <button aria-label={isGuest ? "Sair da demonstração" : "Sair da conta"} className="inline-flex h-10 items-center gap-2 rounded-xl border border-slate-200 px-3 text-sm font-medium text-slate-600 transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600" type="button" onClick={signOut}><LogOut size={16} aria-hidden="true" /><span className="hidden sm:inline">{isGuest ? "Sair da demonstração" : "Sair"}</span></button>
           </div>
         </div>
       </header>
@@ -148,7 +232,7 @@ export function StudyDashboard() {
             <p className="mb-3 px-3 text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">Seu espaço</p>
             <nav className="space-y-1">
               <a href="#inicio" className="flex h-11 items-center gap-3 rounded-xl bg-blue-50 px-3 text-sm font-semibold text-blue-800"><LayoutDashboard size={18} aria-hidden="true" /> Visão geral</a>
-              <a href="#tarefas" className="flex h-11 items-center gap-3 rounded-xl px-3 text-sm font-medium text-slate-600 transition hover:bg-white hover:text-blue-800"><ListTodo size={18} aria-hidden="true" /> Minhas tarefas</a>
+              <a href="#tarefas" className="flex h-11 items-center gap-3 rounded-xl px-3 text-sm font-medium text-slate-600 transition hover:bg-white hover:text-blue-800"><ListTodo size={18} aria-hidden="true" /> {isGuest ? "Tarefas de exemplo" : "Minhas tarefas"}</a>
               <a href="#progresso" className="flex h-11 items-center gap-3 rounded-xl px-3 text-sm font-medium text-slate-600 transition hover:bg-white hover:text-blue-800"><TrendingUp size={18} aria-hidden="true" /> Meu progresso</a>
             </nav>
             <div className="mt-8 rounded-2xl border border-blue-100 bg-white p-4">
@@ -166,8 +250,15 @@ export function StudyDashboard() {
               <h1 className="text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">Organize seus estudos.</h1>
               <p className="mt-2 max-w-2xl text-slate-600">Planeje tarefas, acompanhe prazos e avance no seu ritmo.</p>
             </div>
-            <button className="inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-xl bg-blue-700 px-5 font-semibold text-white shadow-sm transition hover:bg-blue-800 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-200" type="button" onClick={() => { setEditingTask(null); setIsFormOpen(true) }}><CirclePlus size={18} aria-hidden="true" /> Nova tarefa</button>
+            {!isGuest && <button className="inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-xl bg-blue-700 px-5 font-semibold text-white shadow-sm transition hover:bg-blue-800 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-200" type="button" onClick={() => { setEditingTask(null); setIsFormOpen(true) }}><CirclePlus size={18} aria-hidden="true" /> Nova tarefa</button>}
           </div>
+
+          {isGuest && (
+            <div className="mt-5 flex items-start gap-3 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900" role="status">
+              <Eye className="mt-0.5 shrink-0" size={17} aria-hidden="true" />
+              <p><span className="font-semibold">Demonstração somente leitura.</span> As tarefas são exemplos e nenhuma alteração será salva.</p>
+            </div>
+          )}
 
           <section className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4" aria-label="Resumo de tarefas">
             <StatCard label="Tarefas no filtro" value={tasks.length} icon={<ListTodo size={18} />} tone="blue" />
@@ -186,7 +277,7 @@ export function StudyDashboard() {
 
           <section id="tarefas" className="mt-9" aria-labelledby="tasks-title">
             <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-              <div><h2 id="tasks-title" className="text-xl font-semibold tracking-tight text-slate-950">Minhas tarefas</h2><p className="mt-1 text-sm text-slate-500">Uma lista clara para manter o foco.</p></div>
+              <div><h2 id="tasks-title" className="text-xl font-semibold tracking-tight text-slate-950">{isGuest ? "Tarefas de exemplo" : "Minhas tarefas"}</h2><p className="mt-1 text-sm text-slate-500">Uma lista clara para manter o foco.</p></div>
               <label className="relative block w-full sm:max-w-xs">
                 <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={17} aria-hidden="true" />
                 <span className="sr-only">Buscar tarefa ou matéria</span>
@@ -198,27 +289,27 @@ export function StudyDashboard() {
               {filters.map((item) => <button key={item.id} className={`shrink-0 rounded-full px-4 py-2 text-sm font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 ${filter === item.id ? "bg-blue-700 text-white" : "border border-slate-200 bg-white text-slate-600 hover:border-blue-200 hover:text-blue-800"}`} type="button" role="tab" aria-selected={filter === item.id} onClick={() => setFilter(item.id)}>{item.label}</button>)}
             </div>
 
-            {(mutationError || loadError) && <p className="mt-4 rounded-xl border border-rose-100 bg-rose-50 px-4 py-3 text-sm text-rose-700" role="alert">{mutationError || loadError?.message}</p>}
+            {!isGuest && (mutationError || loadError) && <p className="mt-4 rounded-xl border border-rose-100 bg-rose-50 px-4 py-3 text-sm text-rose-700" role="alert">{mutationError || loadError?.message}</p>}
 
-            {isLoading ? (
+            {isTasksLoading ? (
               <div className="mt-5 flex items-center justify-center rounded-2xl border border-slate-200 bg-white py-16 text-slate-500"><LoaderCircle className="animate-spin" size={22} aria-label="Carregando tarefas" /></div>
             ) : tasks.length ? (
               <div className="mt-4 space-y-3">
-                {tasks.map((task) => <TaskCard key={task.id} task={task} onStatusChange={changeStatus} onEdit={(selected) => { setEditingTask(selected); setIsFormOpen(true) }} onDelete={deleteTask} />)}
+                {tasks.map((task) => <TaskCard key={task.id} task={task} onStatusChange={changeStatus} onEdit={(selected) => { setEditingTask(selected); setIsFormOpen(true) }} onDelete={deleteTask} readOnly={isGuest} />)}
               </div>
             ) : (
               <div className="mt-4 rounded-2xl border border-dashed border-blue-200 bg-white px-6 py-14 text-center">
                 <span className="mx-auto grid size-12 place-items-center rounded-2xl bg-blue-50 text-blue-700"><BookOpen size={22} aria-hidden="true" /></span>
                 <h3 className="mt-4 font-semibold text-slate-900">{deferredQuery ? "Nenhuma tarefa encontrada" : "Seu próximo passo começa aqui"}</h3>
                 <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-slate-500">{deferredQuery ? "Experimente outra busca ou mude o filtro." : "Crie sua primeira tarefa para organizar matérias, prazos e metas de estudo."}</p>
-                {!deferredQuery && <button className="mt-5 inline-flex h-10 items-center gap-2 rounded-xl bg-blue-700 px-4 text-sm font-semibold text-white hover:bg-blue-800 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-200" type="button" onClick={() => { setEditingTask(null); setIsFormOpen(true) }}><CirclePlus size={17} aria-hidden="true" /> Criar primeira tarefa</button>}
+                {!deferredQuery && !isGuest && <button className="mt-5 inline-flex h-10 items-center gap-2 rounded-xl bg-blue-700 px-4 text-sm font-semibold text-white hover:bg-blue-800 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-200" type="button" onClick={() => { setEditingTask(null); setIsFormOpen(true) }}><CirclePlus size={17} aria-hidden="true" /> Criar primeira tarefa</button>}
               </div>
             )}
           </section>
         </section>
       </div>
 
-      {isFormOpen && <TaskForm tasks={tasks} editingTask={editingTask} onClose={() => { setIsFormOpen(false); setEditingTask(null) }} onSave={saveTask} />}
+      {isFormOpen && !isGuest && <TaskForm tasks={tasks} editingTask={editingTask} onClose={() => { setIsFormOpen(false); setEditingTask(null) }} onSave={saveTask} />}
     </main>
   )
 }

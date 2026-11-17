@@ -199,21 +199,19 @@ export function AuthPanel({ notice, onAuthenticated, onGuestAccess }: AuthPanelP
             </div>
           </form>
 
-          {mode === "login" && (
-            <div className="mt-4">
-              <button
-                className="flex h-12 w-full items-center justify-center gap-2 rounded-2xl border border-blue-200 bg-white font-semibold text-blue-800 transition hover:bg-blue-50 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-100"
-                type="button"
-                onClick={onGuestAccess}
-              >
-                <UserRound size={17} aria-hidden="true" />
-                Entrar como visitante
-              </button>
-              <p className="mt-2 text-center text-xs text-slate-500">
-                Veja o painel com tarefas de exemplo. Nada será salvo.
-              </p>
-            </div>
-          )}
+          <div className="mt-4">
+            <button
+              className="flex h-12 w-full items-center justify-center gap-2 rounded-2xl border border-blue-200 bg-white font-semibold text-blue-800 transition hover:bg-blue-50 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-100"
+              type="button"
+              onClick={onGuestAccess}
+            >
+              <UserRound size={17} aria-hidden="true" />
+              Entrar como visitante
+            </button>
+            <p className="mt-2 text-center text-xs text-slate-500">
+              Acesse a demonstração com tarefas de exemplo. Nenhuma alteração será salva.
+            </p>
+          </div>
 
           <p className="mt-6 text-center text-sm text-slate-600">
             {mode === "login" ? "Ainda não tenho conta" : "Já tenho uma conta"}{" "}

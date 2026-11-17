@@ -2,7 +2,8 @@
 
 import { useDeferredValue, useEffect, useMemo, useState } from "react"
 import useSWR from "swr"
-import { BookOpen, CalendarDays, CheckCheck, CirclePlus, Eye, GraduationCap, LayoutDashboard, ListTodo, LoaderCircle, LogOut, Search, TrendingUp } from "lucide-react"
+import Link from "next/link"
+import { BookOpen, CalendarDays, CheckCheck, CirclePlus, Eye, GraduationCap, LayoutDashboard, ListTodo, LoaderCircle, LogOut, NotebookPen, Search, TrendingUp } from "lucide-react"
 import { apiRequest, API_BASE_URL, type ApiError, type AuthResponse, type StudyTask, type TaskStatus, type User } from "@/lib/api"
 import { AuthPanel } from "@/components/auth-panel"
 import { TaskCard } from "@/components/task-card"
@@ -219,6 +220,10 @@ export function StudyDashboard() {
             <span><span className="block text-xs font-bold uppercase tracking-[0.2em] text-blue-800">Mentor estudantil</span><span className="mt-0.5 block text-xs text-slate-500">Organizador de estudos</span></span>
           </a>
           <div className="flex items-center gap-3">
+            <Link href="/notebook" className="inline-flex h-10 items-center gap-2 rounded-xl border border-blue-200 px-3 text-sm font-semibold text-blue-800 transition hover:bg-blue-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600" aria-label="Abrir Notebook">
+              <NotebookPen size={16} aria-hidden="true" />
+              <span>Notebook</span>
+            </Link>
             <div className="hidden text-right sm:block"><p className="text-sm font-semibold text-slate-900">Olá, {displayName}</p><p className="text-xs text-slate-500">{displayEmail}</p></div>
             {isGuest && <span className="hidden rounded-full bg-amber-50 px-3 py-1.5 text-xs font-semibold text-amber-800 sm:inline-flex">Modo visitante</span>}
             <button aria-label={isGuest ? "Sair da demonstração" : "Sair da conta"} className="inline-flex h-10 items-center gap-2 rounded-xl border border-slate-200 px-3 text-sm font-medium text-slate-600 transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600" type="button" onClick={signOut}><LogOut size={16} aria-hidden="true" /><span className="hidden sm:inline">{isGuest ? "Sair da demonstração" : "Sair"}</span></button>

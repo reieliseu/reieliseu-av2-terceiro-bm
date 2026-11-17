@@ -24,7 +24,7 @@ function createToken(user: PublicUser) {
 
 export async function registerUser(input: { name: string; email: string; password: string }) {
   const existing = await prisma.user.findUnique({ where: { email: input.email }, select: { id: true } })
-  if (existing) throw new HttpError("Não foi possível criar a conta com esses dados.", 409)
+  if (existing) throw new HttpError("Este e-mail já está cadastrado. Entre na sua conta ou use outro e-mail.", 409)
 
   const passwordHash = await bcrypt.hash(input.password, 12)
   const user = await prisma.user.create({

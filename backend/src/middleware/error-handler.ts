@@ -16,7 +16,7 @@ export const errorHandler: ErrorRequestHandler = (error, _req, res, _next) => {
   }
 
   if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
-    return res.status(409).json({ error: "Já existe um cadastro com esses dados." })
+    return res.status(409).json({ error: "Este e-mail já está cadastrado. Entre na sua conta ou use outro e-mail." })
   }
 
   if (process.env.NODE_ENV !== "production") {

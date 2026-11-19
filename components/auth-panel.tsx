@@ -42,13 +42,15 @@ export function AuthPanel({ notice, onAuthenticated, onGuestAccess }: AuthPanelP
       onAuthenticated(auth)
     } catch (cause) {
       const status = cause instanceof Error ? (cause as ApiError).status : undefined
-      setError(
-        mode === "register" && status === 409
-          ? "Este e-mail já está cadastrado. Clique em “Entrar” abaixo ou use outro e-mail."
-          : cause instanceof Error
-            ? cause.message
-            : "Não foi possível entrar. Tente novamente.",
-      )
+      if (mode === "register" && status === 409) {
+        setMode("login")
+        setRegistrationStep(1)
+        setPassword("")
+        setShowPassword(false)
+        setError("Este e-mail já está cadastrado. Digite sua senha para entrar.")
+      } else {
+        setError(cause instanceof Error ? cause.message : "Não foi possível entrar. Tente novamente.")
+      }
     } finally {
       setIsSubmitting(false)
     }

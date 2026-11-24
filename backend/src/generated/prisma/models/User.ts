@@ -30,6 +30,13 @@ export type UserMinAggregateOutputType = {
   email: string | null
   passwordHash: string | null
   createdAt: Date | null
+  stripeCustomerId: string | null
+  stripeSubscriptionId: string | null
+  subscriptionStatus: string | null
+  subscriptionCurrentPeriodEnd: Date | null
+  subscriptionCancelAtPeriodEnd: boolean | null
+  stripeCheckoutSessionId: string | null
+  stripeCheckoutAttemptKey: string | null
 }
 
 export type UserMaxAggregateOutputType = {
@@ -38,6 +45,13 @@ export type UserMaxAggregateOutputType = {
   email: string | null
   passwordHash: string | null
   createdAt: Date | null
+  stripeCustomerId: string | null
+  stripeSubscriptionId: string | null
+  subscriptionStatus: string | null
+  subscriptionCurrentPeriodEnd: Date | null
+  subscriptionCancelAtPeriodEnd: boolean | null
+  stripeCheckoutSessionId: string | null
+  stripeCheckoutAttemptKey: string | null
 }
 
 export type UserCountAggregateOutputType = {
@@ -46,6 +60,13 @@ export type UserCountAggregateOutputType = {
   email: number
   passwordHash: number
   createdAt: number
+  stripeCustomerId: number
+  stripeSubscriptionId: number
+  subscriptionStatus: number
+  subscriptionCurrentPeriodEnd: number
+  subscriptionCancelAtPeriodEnd: number
+  stripeCheckoutSessionId: number
+  stripeCheckoutAttemptKey: number
   _all: number
 }
 
@@ -56,6 +77,13 @@ export type UserMinAggregateInputType = {
   email?: true
   passwordHash?: true
   createdAt?: true
+  stripeCustomerId?: true
+  stripeSubscriptionId?: true
+  subscriptionStatus?: true
+  subscriptionCurrentPeriodEnd?: true
+  subscriptionCancelAtPeriodEnd?: true
+  stripeCheckoutSessionId?: true
+  stripeCheckoutAttemptKey?: true
 }
 
 export type UserMaxAggregateInputType = {
@@ -64,6 +92,13 @@ export type UserMaxAggregateInputType = {
   email?: true
   passwordHash?: true
   createdAt?: true
+  stripeCustomerId?: true
+  stripeSubscriptionId?: true
+  subscriptionStatus?: true
+  subscriptionCurrentPeriodEnd?: true
+  subscriptionCancelAtPeriodEnd?: true
+  stripeCheckoutSessionId?: true
+  stripeCheckoutAttemptKey?: true
 }
 
 export type UserCountAggregateInputType = {
@@ -72,6 +107,13 @@ export type UserCountAggregateInputType = {
   email?: true
   passwordHash?: true
   createdAt?: true
+  stripeCustomerId?: true
+  stripeSubscriptionId?: true
+  subscriptionStatus?: true
+  subscriptionCurrentPeriodEnd?: true
+  subscriptionCancelAtPeriodEnd?: true
+  stripeCheckoutSessionId?: true
+  stripeCheckoutAttemptKey?: true
   _all?: true
 }
 
@@ -153,6 +195,13 @@ export type UserGroupByOutputType = {
   email: string
   passwordHash: string
   createdAt: Date
+  stripeCustomerId: string | null
+  stripeSubscriptionId: string | null
+  subscriptionStatus: string | null
+  subscriptionCurrentPeriodEnd: Date | null
+  subscriptionCancelAtPeriodEnd: boolean
+  stripeCheckoutSessionId: string | null
+  stripeCheckoutAttemptKey: string | null
   _count: UserCountAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
@@ -182,6 +231,13 @@ export type UserWhereInput = {
   email?: Prisma.StringFilter<"User"> | string
   passwordHash?: Prisma.StringFilter<"User"> | string
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  stripeCustomerId?: Prisma.StringNullableFilter<"User"> | string | null
+  stripeSubscriptionId?: Prisma.StringNullableFilter<"User"> | string | null
+  subscriptionStatus?: Prisma.StringNullableFilter<"User"> | string | null
+  subscriptionCurrentPeriodEnd?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  subscriptionCancelAtPeriodEnd?: Prisma.BoolFilter<"User"> | boolean
+  stripeCheckoutSessionId?: Prisma.StringNullableFilter<"User"> | string | null
+  stripeCheckoutAttemptKey?: Prisma.StringNullableFilter<"User"> | string | null
   tasks?: Prisma.StudyTaskListRelationFilter
 }
 
@@ -191,6 +247,13 @@ export type UserOrderByWithRelationInput = {
   email?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  stripeCustomerId?: Prisma.SortOrderInput | Prisma.SortOrder
+  stripeSubscriptionId?: Prisma.SortOrderInput | Prisma.SortOrder
+  subscriptionStatus?: Prisma.SortOrderInput | Prisma.SortOrder
+  subscriptionCurrentPeriodEnd?: Prisma.SortOrderInput | Prisma.SortOrder
+  subscriptionCancelAtPeriodEnd?: Prisma.SortOrder
+  stripeCheckoutSessionId?: Prisma.SortOrderInput | Prisma.SortOrder
+  stripeCheckoutAttemptKey?: Prisma.SortOrderInput | Prisma.SortOrder
   tasks?: Prisma.StudyTaskOrderByRelationAggregateInput
 }
 
@@ -203,6 +266,13 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   name?: Prisma.StringFilter<"User"> | string
   passwordHash?: Prisma.StringFilter<"User"> | string
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  stripeCustomerId?: Prisma.StringNullableFilter<"User"> | string | null
+  stripeSubscriptionId?: Prisma.StringNullableFilter<"User"> | string | null
+  subscriptionStatus?: Prisma.StringNullableFilter<"User"> | string | null
+  subscriptionCurrentPeriodEnd?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  subscriptionCancelAtPeriodEnd?: Prisma.BoolFilter<"User"> | boolean
+  stripeCheckoutSessionId?: Prisma.StringNullableFilter<"User"> | string | null
+  stripeCheckoutAttemptKey?: Prisma.StringNullableFilter<"User"> | string | null
   tasks?: Prisma.StudyTaskListRelationFilter
 }, "id" | "email">
 
@@ -212,6 +282,13 @@ export type UserOrderByWithAggregationInput = {
   email?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  stripeCustomerId?: Prisma.SortOrderInput | Prisma.SortOrder
+  stripeSubscriptionId?: Prisma.SortOrderInput | Prisma.SortOrder
+  subscriptionStatus?: Prisma.SortOrderInput | Prisma.SortOrder
+  subscriptionCurrentPeriodEnd?: Prisma.SortOrderInput | Prisma.SortOrder
+  subscriptionCancelAtPeriodEnd?: Prisma.SortOrder
+  stripeCheckoutSessionId?: Prisma.SortOrderInput | Prisma.SortOrder
+  stripeCheckoutAttemptKey?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
   _min?: Prisma.UserMinOrderByAggregateInput
@@ -226,6 +303,13 @@ export type UserScalarWhereWithAggregatesInput = {
   email?: Prisma.StringWithAggregatesFilter<"User"> | string
   passwordHash?: Prisma.StringWithAggregatesFilter<"User"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
+  stripeCustomerId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  stripeSubscriptionId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  subscriptionStatus?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  subscriptionCurrentPeriodEnd?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+  subscriptionCancelAtPeriodEnd?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
+  stripeCheckoutSessionId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  stripeCheckoutAttemptKey?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
 }
 
 export type UserCreateInput = {
@@ -234,6 +318,13 @@ export type UserCreateInput = {
   email: string
   passwordHash: string
   createdAt?: Date | string
+  stripeCustomerId?: string | null
+  stripeSubscriptionId?: string | null
+  subscriptionStatus?: string | null
+  subscriptionCurrentPeriodEnd?: Date | string | null
+  subscriptionCancelAtPeriodEnd?: boolean
+  stripeCheckoutSessionId?: string | null
+  stripeCheckoutAttemptKey?: string | null
   tasks?: Prisma.StudyTaskCreateNestedManyWithoutUserInput
 }
 
@@ -243,6 +334,13 @@ export type UserUncheckedCreateInput = {
   email: string
   passwordHash: string
   createdAt?: Date | string
+  stripeCustomerId?: string | null
+  stripeSubscriptionId?: string | null
+  subscriptionStatus?: string | null
+  subscriptionCurrentPeriodEnd?: Date | string | null
+  subscriptionCancelAtPeriodEnd?: boolean
+  stripeCheckoutSessionId?: string | null
+  stripeCheckoutAttemptKey?: string | null
   tasks?: Prisma.StudyTaskUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -252,6 +350,13 @@ export type UserUpdateInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subscriptionStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subscriptionCurrentPeriodEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  subscriptionCancelAtPeriodEnd?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  stripeCheckoutSessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeCheckoutAttemptKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tasks?: Prisma.StudyTaskUpdateManyWithoutUserNestedInput
 }
 
@@ -261,6 +366,13 @@ export type UserUncheckedUpdateInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subscriptionStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subscriptionCurrentPeriodEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  subscriptionCancelAtPeriodEnd?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  stripeCheckoutSessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeCheckoutAttemptKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tasks?: Prisma.StudyTaskUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -270,6 +382,13 @@ export type UserCreateManyInput = {
   email: string
   passwordHash: string
   createdAt?: Date | string
+  stripeCustomerId?: string | null
+  stripeSubscriptionId?: string | null
+  subscriptionStatus?: string | null
+  subscriptionCurrentPeriodEnd?: Date | string | null
+  subscriptionCancelAtPeriodEnd?: boolean
+  stripeCheckoutSessionId?: string | null
+  stripeCheckoutAttemptKey?: string | null
 }
 
 export type UserUpdateManyMutationInput = {
@@ -278,6 +397,13 @@ export type UserUpdateManyMutationInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subscriptionStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subscriptionCurrentPeriodEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  subscriptionCancelAtPeriodEnd?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  stripeCheckoutSessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeCheckoutAttemptKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type UserUncheckedUpdateManyInput = {
@@ -286,6 +412,13 @@ export type UserUncheckedUpdateManyInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subscriptionStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subscriptionCurrentPeriodEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  subscriptionCancelAtPeriodEnd?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  stripeCheckoutSessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeCheckoutAttemptKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type UserCountOrderByAggregateInput = {
@@ -294,6 +427,13 @@ export type UserCountOrderByAggregateInput = {
   email?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  stripeCustomerId?: Prisma.SortOrder
+  stripeSubscriptionId?: Prisma.SortOrder
+  subscriptionStatus?: Prisma.SortOrder
+  subscriptionCurrentPeriodEnd?: Prisma.SortOrder
+  subscriptionCancelAtPeriodEnd?: Prisma.SortOrder
+  stripeCheckoutSessionId?: Prisma.SortOrder
+  stripeCheckoutAttemptKey?: Prisma.SortOrder
 }
 
 export type UserMaxOrderByAggregateInput = {
@@ -302,6 +442,13 @@ export type UserMaxOrderByAggregateInput = {
   email?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  stripeCustomerId?: Prisma.SortOrder
+  stripeSubscriptionId?: Prisma.SortOrder
+  subscriptionStatus?: Prisma.SortOrder
+  subscriptionCurrentPeriodEnd?: Prisma.SortOrder
+  subscriptionCancelAtPeriodEnd?: Prisma.SortOrder
+  stripeCheckoutSessionId?: Prisma.SortOrder
+  stripeCheckoutAttemptKey?: Prisma.SortOrder
 }
 
 export type UserMinOrderByAggregateInput = {
@@ -310,6 +457,13 @@ export type UserMinOrderByAggregateInput = {
   email?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  stripeCustomerId?: Prisma.SortOrder
+  stripeSubscriptionId?: Prisma.SortOrder
+  subscriptionStatus?: Prisma.SortOrder
+  subscriptionCurrentPeriodEnd?: Prisma.SortOrder
+  subscriptionCancelAtPeriodEnd?: Prisma.SortOrder
+  stripeCheckoutSessionId?: Prisma.SortOrder
+  stripeCheckoutAttemptKey?: Prisma.SortOrder
 }
 
 export type UserScalarRelationFilter = {
@@ -323,6 +477,18 @@ export type StringFieldUpdateOperationsInput = {
 
 export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
+}
+
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
+}
+
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
+}
+
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
 }
 
 export type UserCreateNestedOneWithoutTasksInput = {
@@ -345,6 +511,13 @@ export type UserCreateWithoutTasksInput = {
   email: string
   passwordHash: string
   createdAt?: Date | string
+  stripeCustomerId?: string | null
+  stripeSubscriptionId?: string | null
+  subscriptionStatus?: string | null
+  subscriptionCurrentPeriodEnd?: Date | string | null
+  subscriptionCancelAtPeriodEnd?: boolean
+  stripeCheckoutSessionId?: string | null
+  stripeCheckoutAttemptKey?: string | null
 }
 
 export type UserUncheckedCreateWithoutTasksInput = {
@@ -353,6 +526,13 @@ export type UserUncheckedCreateWithoutTasksInput = {
   email: string
   passwordHash: string
   createdAt?: Date | string
+  stripeCustomerId?: string | null
+  stripeSubscriptionId?: string | null
+  subscriptionStatus?: string | null
+  subscriptionCurrentPeriodEnd?: Date | string | null
+  subscriptionCancelAtPeriodEnd?: boolean
+  stripeCheckoutSessionId?: string | null
+  stripeCheckoutAttemptKey?: string | null
 }
 
 export type UserCreateOrConnectWithoutTasksInput = {
@@ -377,6 +557,13 @@ export type UserUpdateWithoutTasksInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subscriptionStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subscriptionCurrentPeriodEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  subscriptionCancelAtPeriodEnd?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  stripeCheckoutSessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeCheckoutAttemptKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type UserUncheckedUpdateWithoutTasksInput = {
@@ -385,6 +572,13 @@ export type UserUncheckedUpdateWithoutTasksInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subscriptionStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subscriptionCurrentPeriodEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  subscriptionCancelAtPeriodEnd?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  stripeCheckoutSessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeCheckoutAttemptKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -424,6 +618,13 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   email?: boolean
   passwordHash?: boolean
   createdAt?: boolean
+  stripeCustomerId?: boolean
+  stripeSubscriptionId?: boolean
+  subscriptionStatus?: boolean
+  subscriptionCurrentPeriodEnd?: boolean
+  subscriptionCancelAtPeriodEnd?: boolean
+  stripeCheckoutSessionId?: boolean
+  stripeCheckoutAttemptKey?: boolean
   tasks?: boolean | Prisma.User$tasksArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
@@ -434,6 +635,13 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   email?: boolean
   passwordHash?: boolean
   createdAt?: boolean
+  stripeCustomerId?: boolean
+  stripeSubscriptionId?: boolean
+  subscriptionStatus?: boolean
+  subscriptionCurrentPeriodEnd?: boolean
+  subscriptionCancelAtPeriodEnd?: boolean
+  stripeCheckoutSessionId?: boolean
+  stripeCheckoutAttemptKey?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -442,6 +650,13 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   email?: boolean
   passwordHash?: boolean
   createdAt?: boolean
+  stripeCustomerId?: boolean
+  stripeSubscriptionId?: boolean
+  subscriptionStatus?: boolean
+  subscriptionCurrentPeriodEnd?: boolean
+  subscriptionCancelAtPeriodEnd?: boolean
+  stripeCheckoutSessionId?: boolean
+  stripeCheckoutAttemptKey?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectScalar = {
@@ -450,9 +665,16 @@ export type UserSelectScalar = {
   email?: boolean
   passwordHash?: boolean
   createdAt?: boolean
+  stripeCustomerId?: boolean
+  stripeSubscriptionId?: boolean
+  subscriptionStatus?: boolean
+  subscriptionCurrentPeriodEnd?: boolean
+  subscriptionCancelAtPeriodEnd?: boolean
+  stripeCheckoutSessionId?: boolean
+  stripeCheckoutAttemptKey?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "passwordHash" | "createdAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "passwordHash" | "createdAt" | "stripeCustomerId" | "stripeSubscriptionId" | "subscriptionStatus" | "subscriptionCurrentPeriodEnd" | "subscriptionCancelAtPeriodEnd" | "stripeCheckoutSessionId" | "stripeCheckoutAttemptKey", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tasks?: boolean | Prisma.User$tasksArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -471,6 +693,13 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     email: string
     passwordHash: string
     createdAt: Date
+    stripeCustomerId: string | null
+    stripeSubscriptionId: string | null
+    subscriptionStatus: string | null
+    subscriptionCurrentPeriodEnd: Date | null
+    subscriptionCancelAtPeriodEnd: boolean
+    stripeCheckoutSessionId: string | null
+    stripeCheckoutAttemptKey: string | null
   }, ExtArgs["result"]["user"]>
   composites: {}
 }
@@ -900,6 +1129,13 @@ export interface UserFieldRefs {
   readonly email: Prisma.FieldRef<"User", 'String'>
   readonly passwordHash: Prisma.FieldRef<"User", 'String'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
+  readonly stripeCustomerId: Prisma.FieldRef<"User", 'String'>
+  readonly stripeSubscriptionId: Prisma.FieldRef<"User", 'String'>
+  readonly subscriptionStatus: Prisma.FieldRef<"User", 'String'>
+  readonly subscriptionCurrentPeriodEnd: Prisma.FieldRef<"User", 'DateTime'>
+  readonly subscriptionCancelAtPeriodEnd: Prisma.FieldRef<"User", 'Boolean'>
+  readonly stripeCheckoutSessionId: Prisma.FieldRef<"User", 'String'>
+  readonly stripeCheckoutAttemptKey: Prisma.FieldRef<"User", 'String'>
 }
     
 

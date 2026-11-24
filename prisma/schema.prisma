@@ -13,6 +13,13 @@ model User {
   email        String      @unique @db.VarChar(254)
   passwordHash String      @map("password_hash") @db.VarChar(255)
   createdAt    DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)
+  stripeCustomerId String?   @map("stripe_customer_id") @db.Text
+  stripeSubscriptionId String? @map("stripe_subscription_id") @db.Text
+  subscriptionStatus String? @map("subscription_status") @db.VarChar(40)
+  subscriptionCurrentPeriodEnd DateTime? @map("subscription_current_period_end") @db.Timestamptz(6)
+  subscriptionCancelAtPeriodEnd Boolean @default(false) @map("subscription_cancel_at_period_end")
+  stripeCheckoutSessionId String? @map("stripe_checkout_session_id") @db.Text
+  stripeCheckoutAttemptKey String? @map("stripe_checkout_attempt_key") @db.Text
   tasks        StudyTask[]
 
   @@map("app_users")

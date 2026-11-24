@@ -26,6 +26,12 @@ export async function apiRequest<T>(path: string, token?: string, init: RequestI
 
 export type User = { id: string; name: string; email: string }
 export type AuthResponse = { token: string; user: User }
+export type PremiumSubscription = {
+  isPremium: boolean
+  status: string | null
+  currentPeriodEnd: string | null
+  cancelAtPeriodEnd: boolean
+}
 export type TaskStatus = "PENDING" | "IN_PROGRESS" | "COMPLETED"
 export type TaskPriority = "LOW" | "MEDIUM" | "HIGH"
 export type StudyTask = {

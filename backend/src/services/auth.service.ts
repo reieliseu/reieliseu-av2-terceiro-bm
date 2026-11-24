@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
-import { prisma } from "../lib/prisma"
+import { getPrisma } from "../lib/prisma"
 import { HttpError } from "../lib/errors"
 
 type PublicUser = { id: string; name: string; email: string }
@@ -23,11 +23,11 @@ function createToken(user: PublicUser) {
 }
 
 export async function registerUser(input: { name: string; email: string; password: string }) {
-  const existing = await prisma.user.findUnique({ where: { email: input.email }, select: { id: true } })
+  const existing = await getPrisma().user.findUnique({ where: { email: input.email }, select: { id: true } })
   if (existing) throw new HttpError("Este e-mail já está cadastrado. Entre na sua conta ou use outro e-mail.", 409)
 
   const passwordHash = await bcrypt.hash(input.password, 12)
-  const user = await prisma.user.create({
+  const user = await getPrisma().user.create({
     data: { name: input.name, email: input.email, passwordHash },
     select: { id: true, name: true, email: true },
   })
@@ -36,7 +36,7 @@ export async function registerUser(input: { name: string; email: string; passwor
 }
 
 export async function loginUser(input: { email: string; password: string }) {
-  const user = await prisma.user.findUnique({ where: { email: input.email } })
+  const user = await getPrisma().user.findUnique({ where: { email: input.email } })
   const passwordMatches = user ? await bcrypt.compare(input.password, user.passwordHash) : false
 
   if (!user || !passwordMatches) {

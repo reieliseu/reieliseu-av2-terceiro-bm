@@ -1,5 +1,5 @@
 import { Prisma } from "../generated/prisma/client"
-import { prisma } from "../lib/prisma"
+import { getPrisma } from "../lib/prisma"
 import { HttpError } from "../lib/errors"
 
 const taskSelect = {
@@ -31,7 +31,7 @@ async function validateParent(userId: string, taskId: string | undefined, parent
   if (parentId === undefined || parentId === null) return
   if (parentId === taskId) throw new HttpError("Uma tarefa não pode ser subtarefa dela mesma.", 422)
 
-  let ancestor = await prisma.studyTask.findFirst({
+  let ancestor = await getPrisma().studyTask.findFirst({
     where: { id: parentId, userId },
     select: { id: true, parentId: true, status: true },
   })
@@ -46,7 +46,7 @@ async function validateParent(userId: string, taskId: string | undefined, parent
     if (visited.has(ancestor.id)) throw new HttpError("A hierarquia atual contém um ciclo.", 409)
     visited.add(ancestor.id)
     if (!ancestor.parentId) break
-    ancestor = await prisma.studyTask.findFirst({
+    ancestor = await getPrisma().studyTask.findFirst({
       where: { id: ancestor.parentId, userId },
       select: { id: true, parentId: true, status: true },
     })
@@ -66,7 +66,7 @@ function mapInput(input: TaskInput) {
 }
 
 export async function listTasks(userId: string, filters: { status?: string; subject?: string; q?: string }) {
-  return prisma.studyTask.findMany({
+  return getPrisma().studyTask.findMany({
     where: {
       userId,
       ...(filters.status && { status: filters.status }),
@@ -85,7 +85,7 @@ export async function listTasks(userId: string, filters: { status?: string; subj
 
 export async function createTask(userId: string, input: TaskInput & { title: string; subject: string; status: string; priority: string }) {
   await validateParent(userId, undefined, input.parentId)
-  return prisma.studyTask.create({
+  return getPrisma().studyTask.create({
     data: {
       ...mapInput(input),
       title: input.title,
@@ -99,13 +99,13 @@ export async function createTask(userId: string, input: TaskInput & { title: str
 }
 
 export async function updateTask(userId: string, id: string, input: TaskInput) {
-  const current = await prisma.studyTask.findFirst({ where: { id, userId }, select: { id: true } })
+  const current = await getPrisma().studyTask.findFirst({ where: { id, userId }, select: { id: true } })
   if (!current) throw new HttpError("Tarefa não encontrada.", 404)
 
   if (input.parentId !== undefined) await validateParent(userId, id, input.parentId)
 
   if (input.status === "COMPLETED") {
-    const pendingChildren = await prisma.studyTask.count({
+    const pendingChildren = await getPrisma().studyTask.count({
       where: { userId, parentId: id, status: { not: "COMPLETED" } },
     })
     if (pendingChildren > 0) {
@@ -113,7 +113,7 @@ export async function updateTask(userId: string, id: string, input: TaskInput) {
     }
   }
 
-  return prisma.studyTask.update({
+  return getPrisma().studyTask.update({
     where: { id },
     data: mapInput(input),
     select: taskSelect,
@@ -121,7 +121,7 @@ export async function updateTask(userId: string, id: string, input: TaskInput) {
 }
 
 export async function deleteTask(userId: string, id: string) {
-  const current = await prisma.studyTask.findFirst({
+  const current = await getPrisma().studyTask.findFirst({
     where: { id, userId },
     select: { id: true, _count: { select: { subtasks: true } } },
   })
@@ -129,5 +129,5 @@ export async function deleteTask(userId: string, id: string) {
   if (current._count.subtasks > 0) {
     throw new HttpError("Mova ou exclua as tarefas vinculadas antes de excluir esta tarefa.", 409)
   }
-  await prisma.studyTask.delete({ where: { id } })
+  await getPrisma().studyTask.delete({ where: { id } })
 }

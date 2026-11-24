@@ -3,9 +3,14 @@ services:
     name: mentor-estudantil-api
     runtime: node
     plan: free
+    branch: main
+    autoDeployTrigger: "off"
+    healthCheckPath: /api/v1/health
     buildCommand: pnpm install --frozen-lockfile && pnpm prisma:generate && pnpm api:typecheck
     startCommand: pnpm api:start
     envVars:
+      - key: NODE_ENV
+        value: production
       - key: DATABASE_URL
         sync: false
       - key: JWT_SECRET

@@ -12,7 +12,7 @@ Aplicação full stack para organizar tarefas de estudo por matéria, prazo, pri
 
 ## Requisitos
 
-- Node.js 20 ou superior e pnpm.
+- Node.js 24.11.1 ou patch 24.x posterior e pnpm 10.28.0 (fixado em package.json).
 - PostgreSQL acessível pela aplicação (Neon em desenvolvimento/produção).
 - `DATABASE_URL` e `JWT_SECRET` configurados no ambiente. O segredo JWT deve ter pelo menos 32 caracteres.
 
@@ -21,7 +21,7 @@ Aplicação full stack para organizar tarefas de estudo por matéria, prazo, pri
 1. Instale as dependências:
 
    ```bash
-   pnpm install
+   pnpm install --frozen-lockfile
    ```
 
 2. Copie `.env.example` para `.env` e configure `DATABASE_URL` com a conexão PostgreSQL e `JWT_SECRET` com um segredo aleatório de pelo menos 32 caracteres. Não envie `.env` ao repositório.
@@ -101,16 +101,21 @@ prisma/migrations/             SQL versionado; alterações aplicadas via Neon M
 | `PORT` | API | Porta HTTP; o servidor usa a porta definida pela hospedagem ou `4000`. |
 | `FRONTEND_URL` | API | Origem principal permitida pelo CORS. |
 | `ALLOWED_ORIGINS` | API | Origens adicionais, separadas por vírgula, se necessário. |
-| `NEXT_PUBLIC_API_URL` | Frontend | URL pública da API terminada em `/api/v1`; localmente usa `http://localhost:4000/api/v1`. |
+| `NEXT_PUBLIC_API_URL` | Build do frontend | URL pública da API terminada em `/api/v1`; localmente usa `http://localhost:4000/api/v1`. |
 
+O frontend utiliza somente NEXT_PUBLIC_API_URL. Credenciais do banco e JWT pertencem ao backend Express. O build do frontend não depende de Prisma ou credenciais privadas.
 O arquivo `.env.example` contém somente nomes e valores vazios/de desenvolvimento; não coloque segredos no frontend, no código ou no repositório.
 
 ## Publicação (AV2)
 
-A configuração `render.yaml` prepara o serviço Express no Render. Configure no serviço `DATABASE_URL`, `JWT_SECRET` e `FRONTEND_URL` usando os valores privados do ambiente. Publique a interface Next.js na Vercel e defina `NEXT_PUBLIC_API_URL` como `https://<host-da-api>/api/v1`; defina `FRONTEND_URL` na API como a origem pública exata da interface. Publique primeiro a API e o banco, depois a interface, e teste cadastro, login, CRUD, regra de subtarefas, logout e acesso sem token pela URL pública.
+Consulte [a preparação atual para deploy](docs/DEPLOY.md). O projeto está focado no planejador de estudos; a integração de pagamentos foi removida. O Notebook está disponível a qualquer usuário autenticado, sem assinatura, e continua sendo uma prévia em memória.
 
-**URL pública da interface:** preencher após publicar na Vercel.  
-**URL pública da API:** preencher após publicar no Render.
+Express permanece preparado para o Render, com PostgreSQL no Neon. A interface chama diretamente `NEXT_PUBLIC_API_URL`. O build atual ainda usa runtime Next.js porque o proxy `/api/v1/*` foi preservado; exportação para Apache exige concluir a configuração estática e informar o caminho público real. Não enviar `.next/` por FTP.
+
+Use `pnpm build:web` para compilar apenas a interface; `pnpm build` também gera Prisma e verifica os tipos do backend. Nenhum deploy ou alteração no banco foi realizado nesta preparação.
+
+**URL pública da interface:** pendente.
+**URL pública da API:** pendente.
 
 ## Componentes e fontes
 

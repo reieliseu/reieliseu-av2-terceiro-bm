@@ -525,6 +525,14 @@ export type StudyTaskUncheckedCreateNestedManyWithoutParentInput = {
   connect?: Prisma.StudyTaskWhereUniqueInput | Prisma.StudyTaskWhereUniqueInput[]
 }
 
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
+}
+
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
+}
+
 export type StudyTaskUpdateOneWithoutSubtasksNestedInput = {
   create?: Prisma.XOR<Prisma.StudyTaskCreateWithoutSubtasksInput, Prisma.StudyTaskUncheckedCreateWithoutSubtasksInput>
   connectOrCreate?: Prisma.StudyTaskCreateOrConnectWithoutSubtasksInput

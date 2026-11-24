@@ -1,8 +1,10 @@
+import { apiUrl } from "@/lib/deployment"
+
 type RouteContext = {
   params: Promise<{ path: string[] }>
 }
 
-const apiBaseUrl = (process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:4000/api/v1").replace(/\/+$/, "")
+const apiBaseUrl = apiUrl(process.env.NEXT_PUBLIC_API_URL, process.env.NODE_ENV === "production")
 
 async function forwardRequest(request: Request, { params }: RouteContext) {
   const { path } = await params

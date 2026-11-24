@@ -8,7 +8,6 @@ import { apiRequest, API_BASE_URL, type ApiError, type AuthResponse, type StudyT
 import { AuthPanel } from "@/components/auth-panel"
 import { TaskCard } from "@/components/task-card"
 import { TaskForm, type TaskInput } from "@/components/task-form"
-import { PremiumPlanCard } from "@/components/premium-plan-card"
 
 type Filter = "ALL" | TaskStatus
 
@@ -266,7 +265,6 @@ export function StudyDashboard() {
             </div>
           )}
 
-          {!isGuest && token && user && <PremiumPlanCard token={token} />}
 
           <section className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4" aria-label="Resumo de tarefas">
             <StatCard label="Tarefas no filtro" value={tasks.length} icon={<ListTodo size={18} />} tone="blue" />

@@ -10,9 +10,10 @@
   "scripts": {
     "dev": "concurrently -k -n WEB,API -c blue,magenta \"next dev\" \"tsx watch backend/src/server.ts\"",
     "build": "pnpm prisma:generate && pnpm build:web && pnpm api:typecheck",
-    "build:web": "next build",
+    "build:web": "next build && node scripts/prepare-export.mjs",
     "web:dev": "next dev",
-    "start": "next start",
+    "check:export": "node scripts/check-export.mjs",
+    "start": "node scripts/serve-static.mjs",
     "api:dev": "tsx watch backend/src/server.ts",
     "api:start": "tsx backend/src/server.ts",
     "api:typecheck": "tsc --noEmit --project backend/tsconfig.json",

@@ -38,7 +38,7 @@ Aplicação full stack para organizar tarefas de estudo por matéria, prazo, pri
    pnpm dev
    ```
 
-   A interface inicia em `http://localhost:3000` e a API Express em `http://localhost:4000`. Para iniciar apenas a API: `pnpm api:dev`.
+   A interface inicia em `http://localhost:3000/tecti/2026/gpec17/projeto-eliseu/` e a API Express em `http://localhost:4000`. Para iniciar apenas a API: `pnpm api:dev`.
 
 ## Testes automatizados
 
@@ -108,14 +108,21 @@ O arquivo `.env.example` contém somente nomes e valores vazios/de desenvolvimen
 
 ## Publicação (AV2)
 
-Consulte [a preparação atual para deploy](docs/DEPLOY.md). O projeto está focado no planejador de estudos; a integração de pagamentos foi removida. O Notebook está disponível a qualquer usuário autenticado, sem assinatura, e continua sendo uma prévia em memória.
+Consulte [o roteiro de deploy](docs/DEPLOY.md). O frontend Next.js está configurado para exportação estática na Hostinger; a API Express permanece no Render e o PostgreSQL no Neon. Não há pagamentos. O Notebook exige apenas autenticação e continua sendo uma prévia em memória.
 
-Express permanece preparado para o Render, com PostgreSQL no Neon. A interface chama diretamente `NEXT_PUBLIC_API_URL`. O build atual ainda usa runtime Next.js porque o proxy `/api/v1/*` foi preservado; exportação para Apache exige concluir a configuração estática e informar o caminho público real. Não enviar `.next/` por FTP.
+```bash
+pnpm build:web
+pnpm check:export
+pnpm start
+```
 
-Use `pnpm build:web` para compilar apenas a interface; `pnpm build` também gera Prisma e verifica os tipos do backend. Nenhum deploy ou alteração no banco foi realizado nesta preparação.
+`build:web` gera `out/` e inclui `.htaccess` automaticamente. `start` serve uma prévia estática local; não usa `next start`. Envie o conteúdo de `out/`, incluindo arquivos ocultos e auxiliares, à pasta remota do projeto. Não envie `.next/` ou `.env`.
 
-**URL pública da interface:** pendente.
-**URL pública da API:** pendente.
+O caminho `/tecti/2026/gpec17/projeto-eliseu` está em `config/site.mjs`. Mudanças na subpasta ou em NEXT_PUBLIC_API_URL exigem novo build. No Render, a origem CORS deve ser `FRONTEND_URL=https://startnet.app.br`, sem subpasta.
+
+**URL pública da interface:** https://startnet.app.br/tecti/2026/gpec17/projeto-eliseu/
+
+**URL pública da API:** https://reieliseu-av2-terceiro-bm.onrender.com
 
 ## Componentes e fontes
 
